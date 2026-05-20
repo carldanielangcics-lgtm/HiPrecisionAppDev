@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hi-Precision Diagnostics</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --hp-navy:#0B1F3A;
+  --hp-navy2:#162E50;
+  --hp-teal:#0D7C6B;
+  --hp-teal-mid:#1D9E75;
+  --hp-teal-light:#5DCAA5;
+  --hp-teal-bg:#E1F5EE;
+  --hp-red:#D85A30;
+  --hp-amber:#BA7517;
+  --bg:#f4f4f1;
+  --bg2:#fff;
+  --bg3:#f0f0ec;
+  --text1:#111827;
+  --text2:#6B7280;
+  --border:#E5E7EB;
+  --radius:10px;
+  --font:'DM Sans',sans-serif;
+  --display:'Playfair Display',serif;
+}
+
+body{font-family:var(--font);background:var(--bg);color:var(--text1);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--hp-navy);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px;flex-shrink:0;z-index:10}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-logo{width:30px;height:30px;background:var(--hp-teal-mid);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.topbar-logo svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2}
+.topbar-name{font-family:var(--display);font-size:15px;color:#fff;font-weight:500;letter-spacing:.02em}
+.topbar-name span{color:var(--hp-teal-light)}
+.view-switcher{display:flex;gap:3px;background:rgba(255,255,255,.08);border-radius:8px;padding:3px}
+.view-btn{font-family:var(--font);font-size:11px;font-weight:500;padding:4px 12px;border-radius:6px;border:none;cursor:pointer;color:rgba(255,255,255,.55);background:transparent;transition:all .18s;letter-spacing:.04em;text-transform:uppercase}
+.view-btn.active{background:var(--hp-teal-mid);color:#fff}
+.topbar-user{display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--hp-teal-mid);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff}
+.user-name{font-size:12px;color:rgba(255,255,255,.7)}
+
+/* ── MAIN LAYOUT ── */
+.main{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{width:200px;background:var(--hp-navy);display:flex;flex-direction:column;flex-shrink:0;padding:14px 0;overflow-y:auto}
+.sidebar-section{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);padding:14px 16px 5px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;color:rgba(255,255,255,.52);font-size:12.5px;transition:all .13s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{background:var(--hp-navy2);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(13,124,107,.18);border-left-color:var(--hp-teal-mid);color:var(--hp-teal-light)}
+.nav-item i{font-size:15px;width:18px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--hp-red);color:#fff;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px}
+.sidebar-footer{margin-top:auto;padding:12px 16px;border-top:.5px solid rgba(255,255,255,.07)}
+.sidebar-footer-item{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.38);font-size:11.5px;padding:6px 0;cursor:pointer;transition:color .13s}
+.sidebar-footer-item:hover{color:rgba(255,255,255,.7)}
+.sidebar-footer-item i{font-size:14px}
+
+/* ── CONTENT AREA ── */
+.content{flex:1;background:var(--bg);padding:20px;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+
+/* ── COMMON ── */
+.content-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.content-title{font-family:var(--display);font-size:20px;font-weight:500;color:var(--text1)}
+.content-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.btn-primary{background:var(--hp-teal);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .15s;white-space:nowrap}
+.btn-primary:hover{background:var(--hp-teal-mid)}
+.btn-primary i{font-size:14px}
+.btn-secondary{background:var(--bg2);color:var(--text1);border:.5px solid var(--border);padding:7px 14px;border-radius:8px;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn-secondary:hover{background:var(--bg3)}
+.btn-secondary i{font-size:14px;color:var(--text2)}
+.btn-danger{background:#FAECE7;color:var(--hp-red);border:.5px solid #f0b8a0;padding:6px 12px;border-radius:8px;font-family:var(--font);font-size:11.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.stat-card{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.stat-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:6px}
+.stat-value{font-size:22px;font-weight:500;color:var(--text1);line-height:1}
+.stat-delta{font-size:10px;margin-top:4px;display:flex;align-items:center;gap:3px}
+.stat-delta.up{color:#0F6E56}.stat-delta.down{color:#993C1D}
+.stat-delta i{font-size:11px}
+
+/* Panel */
+.panel{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.panel-header{padding:11px 16px;border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:13px;font-weight:500;color:var(--text1);display:flex;align-items:center;gap:7px}
+.panel-title i{font-size:15px;color:var(--hp-teal)}
+.panel-action{font-size:11px;color:var(--hp-teal);cursor:pointer;font-weight:500;border:none;background:none;font-family:var(--font)}
+.panel-action:hover{text-decoration:underline}
+
+/* Grid layouts */
+.two-col{display:grid;grid-template-columns:1fr 280px;gap:12px;margin-bottom:12px}
+.two-col-equal{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);font-weight:500;padding:8px 16px;text-align:left;border-bottom:.5px solid var(--border);background:var(--bg3)}
+.data-table td{padding:9px 16px;border-bottom:.5px solid var(--border);color:var(--text1);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tbody tr:hover td{background:#f9f9f7}
+.data-table .actions{display:flex;gap:6px}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px}
+.badge-waiting{background:#FAEEDA;color:#633806}
+.badge-active{background:#E1F5EE;color:#085041}
+.badge-done{background:#EAF3DE;color:#27500A}
+.badge-urgent{background:#FAECE7;color:#4A1B0C}
+.badge-purple{background:#EEEDFE;color:#3C3489}
+.badge-grey{background:var(--bg3);color:var(--text2)}
+
+/* Search/filter bar */
+.filter-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:.5px solid var(--border);flex-wrap:wrap}
+.search-wrap{display:flex;align-items:center;gap:7px;background:var(--bg3);border:.5px solid var(--border);border-radius:7px;padding:6px 11px;flex:1;min-width:200px}
+.search-wrap i{color:var(--text2);font-size:14px;flex-shrink:0}
+.search-wrap input{border:none;background:transparent;font-family:var(--font);font-size:12px;color:var(--text1);outline:none;flex:1;min-width:0}
+.filter-select{border:.5px solid var(--border);border-radius:7px;background:var(--bg2);font-family:var(--font);font-size:12px;color:var(--text1);padding:6px 10px;cursor:pointer;outline:none}
+
+/* Queue list */
+.queue-list{padding:8px}
+.queue-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;margin-bottom:4px;cursor:pointer;transition:background .12s}
+.queue-item:hover{background:var(--bg3)}
+.queue-item.active-item{background:var(--hp-teal-bg)}
+.queue-num{width:26px;height:26px;border-radius:50%;background:var(--hp-navy);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.queue-num.qurgent{background:var(--hp-red)}
+.queue-num.qactive{background:var(--hp-teal-mid)}
+.queue-info{flex:1;min-width:0}
+.queue-name{font-size:12px;font-weight:500;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.queue-detail{font-size:10px;color:var(--text2)}
+.queue-time{font-size:10px;color:var(--text2);flex-shrink:0}
+
+/* Form elements */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text2)}
+.form-label span{color:var(--hp-red)}
+.form-input,.form-select,.form-textarea{border:.5px solid var(--border);border-radius:7px;padding:8px 11px;font-family:var(--font);font-size:13px;color:var(--text1);background:var(--bg2);outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--hp-teal);box-shadow:0 0 0 3px rgba(13,124,107,.1)}
+.form-input::placeholder{color:var(--text2);opacity:.55}
+.form-textarea{resize:vertical;min-height:72px}
+.form-section{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--hp-teal);margin:18px 0 10px;padding-bottom:6px;border-bottom:.5px solid var(--hp-teal-bg)}
+.form-note{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Appt items */
+.appt-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:.5px solid var(--border)}
+.appt-row:last-child{border-bottom:none}
+.appt-time-col{font-size:11px;font-weight:600;color:var(--text2);width:46px;flex-shrink:0}
+.appt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.appt-dot.done{background:#1D9E75}
+.appt-dot.now{background:var(--hp-teal);border:2px solid var(--hp-teal-light)}
+.appt-dot.pending{background:var(--border)}
+.appt-info{flex:1}
+.appt-name{font-size:12px;font-weight:500;color:var(--text1)}
+.appt-type{font-size:10px;color:var(--text2)}
+
+/* Calendar */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:12px}
+.cal-day-hdr{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);text-align:center;padding:4px}
+.cal-day{min-height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:background .1s;position:relative}
+.cal-day:hover{background:var(--bg3)}
+.cal-day.other-month{color:var(--border)}
+.cal-day.today{background:var(--hp-teal);color:#fff;font-weight:600}
+.cal-day.has-appt::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--hp-teal-light)}
+.cal-day.today.has-appt::after{background:#fff}
+
+/* Queue board */
+.queue-board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.queue-col-header{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.queue-col-header i{font-size:14px}
+.queue-card{background:var(--bg2);border:.5px solid var(--border);border-radius:8px;padding:11px 13px;margin-bottom:8px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:10px}
+.queue-card:hover{border-color:var(--hp-teal);box-shadow:0 2px 8px rgba(13,124,107,.1)}
+.queue-card.urgent-card{border-left:3px solid var(--hp-red)}
+.queue-card-num{width:28px;height:28px;border-radius:50%;background:var(--hp-navy);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.queue-card-num.u{background:var(--hp-red)}
+.queue-card-num.a{background:var(--hp-teal-mid)}
+.queue-card-body{flex:1;min-width:0}
+.queue-card-name{font-size:12px;font-weight:500;color:var(--text1)}
+.queue-card-meta{font-size:10px;color:var(--text2);margin-top:2px}
+.queue-card-time{font-size:10px;color:var(--text2);margin-top:5px}
+
+/* Billing */
+.bill-summary-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:.5px solid var(--border);font-size:12px}
+.bill-summary-row:last-child{border-bottom:none}
+.bill-total-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;font-size:13px;font-weight:600;border-top:.5px solid var(--border);margin-top:4px}
+.bill-status-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.bill-status-chip{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;border:.5px solid var(--border);background:var(--bg2);color:var(--text2);transition:all .15s}
+.bill-status-chip.active{background:var(--hp-teal);color:#fff;border-color:var(--hp-teal)}
+
+/* Reports */
+.report-card{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.report-card-left{display:flex;align-items:center;gap:12px}
+.report-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.report-icon.green{background:var(--hp-teal-bg)}
+.report-icon.green i{color:var(--hp-teal)}
+.report-icon.blue{background:#EEF0FE}
+.report-icon.blue i{color:#3C3489}
+.report-icon.amber{background:#FEF5E7}
+.report-icon.amber i{color:var(--hp-amber)}
+.report-icon.red{background:#FAECE7}
+.report-icon.red i{color:var(--hp-red)}
+.report-icon i{font-size:18px}
+.report-name{font-size:13px;font-weight:500;color:var(--text1)}
+.report-meta{font-size:11px;color:var(--text2);margin-top:2px}
+.report-actions{display:flex;gap:8px}
+
+/* Chart bar (pure CSS) */
+.chart-wrap{padding:12px 16px}
+.chart-bar-group{display:flex;align-items:flex-end;gap:6px;height:100px;margin-bottom:6px}
+.chart-bar{flex:1;border-radius:4px 4px 0 0;background:var(--hp-teal-bg);transition:height .3s;cursor:pointer;position:relative;min-width:18px}
+.chart-bar:hover{background:var(--hp-teal)}
+.chart-bar span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--text2);white-space:nowrap}
+.chart-labels{display:flex;gap:6px}
+.chart-label{flex:1;font-size:9px;color:var(--text2);text-align:center;min-width:18px}
+
+/* Modal overlay */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border-radius:14px;width:560px;max-width:95vw;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);transform:scale(.96);transition:transform .2s}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-header{padding:16px 20px;border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:var(--display);font-size:16px;font-weight:500}
+.modal-close{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text2)}
+.modal-body{padding:20px}
+.modal-footer{padding:14px 20px;border-top:.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+
+/* Tabs */
+.tab-bar{display:flex;gap:2px;background:var(--bg3);border-radius:8px;padding:3px;margin-bottom:16px;width:fit-content}
+.tab-btn{font-family:var(--font);font-size:11.5px;font-weight:500;padding:5px 14px;border-radius:6px;border:none;cursor:pointer;color:var(--text2);background:transparent;transition:all .15s}
+.tab-btn.active{background:var(--bg2);color:var(--text1);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* Patient profile card */
+.patient-profile-card{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.patient-big-avatar{width:52px;height:52px;border-radius:50%;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#3C3489;flex-shrink:0}
+.patient-profile-name{font-size:15px;font-weight:500;color:var(--text1)}
+.patient-profile-meta{font-size:11.5px;color:var(--text2);margin-top:2px}
+.patient-profile-tags{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+
+/* Inline pulse */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--hp-teal-light);display:inline-block;animation:pulse 2s infinite;margin-right:4px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     TOPBAR
+═══════════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">
+      <svg viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" stroke-linecap="round"/><circle cx="8" cy="8" r="3" stroke-width="1.5"/></svg>
+    </div>
+    <div class="topbar-name">Hi-Precision <span>Diagnostics</span></div>
+  </div>
+  <div class="view-switcher">
+    <button class="view-btn active" onclick="switchRole('frontdesk',this)">Front Desk</button>
+    <button class="view-btn" onclick="switchRole('nurse',this)">Nurse</button>
+    <button class="view-btn" onclick="switchRole('doctor',this)">Doctor</button>
+  </div>
+  <div class="topbar-user">
+    <div class="user-avatar" id="user-initials">MR</div>
+    <div class="user-name" id="user-label">Maria Reyes · Front Desk</div>
+  </div>
+</div>
+
+<div class="main">
+  <!-- ══════════════════════════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="sidebar" id="sidebar"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       CONTENT
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="content" id="content">
+
+    <!-- ─── PAGE: DASHBOARD ─────────────────────────────────────── -->
+    <div class="page active" id="page-dashboard">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Dashboard</div>
+          <div class="content-sub">Monday, May 18, 2026 · Sampaloc, Manila</div>
+        </div>
+        <button class="btn-primary" onclick="navigateTo('registration')"><i class="ti ti-user-plus"></i> Register Patient</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Today's Patients</div>
+          <div class="stat-value">47</div>
+          <div class="stat-delta up"><i class="ti ti-trending-up"></i> +12% vs yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">In Queue</div>
+          <div class="stat-value">11</div>
+          <div class="stat-delta down"><i class="ti ti-clock"></i> Avg wait 18 min</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Appointments</div>
+          <div class="stat-value">34</div>
+          <div class="stat-delta up"><i class="ti ti-calendar"></i> 8 remaining</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Completed</div>
+          <div class="stat-value">36</div>
+          <div class="stat-delta up"><i class="ti ti-check"></i> 77% completion</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Patient records mini -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="ti ti-list"></i> Recent Patients</div>
+            <button class="panel-action" onclick="navigateTo('patients')">View all →</button>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Patient</th><th>Service</th><th>Doctor</th><th>Status</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Santos, Ana</strong><br><small style="color:var(--text2)">P-00281</small></td><td>CBC + Urinalysis</td><td>Dr. Cruz</td><td><span class="badge badge-active">● In Progress</span></td><td>9:14 AM</td></tr>
+              <tr><td><strong>Dela Cruz, Mario</strong><br><small style="color:var(--text2)">P-00282</small></td><td>ECG + Echo</td><td>Dr. Ramos</td><td><span class="badge badge-waiting">● Waiting</span></td><td>9:30 AM</td></tr>
+              <tr><td><strong>Gonzales, Linda</strong><br><small style="color:var(--text2)">P-00283</small></td><td>Mammography</td><td>Dr. Reyes</td><td><span class="badge badge-urgent">● Urgent</span></td><td>9:45 AM</td></tr>
+              <tr><td><strong>Ocampo, Jose</strong><br><small style="color:var(--text2)">P-00280</small></td><td>CT-Scan</td><td>Dr. Lim</td><td><span class="badge badge-done">● Done</span></td><td>8:00 AM</td></tr>
+              <tr><td><strong>Reyes, Carla</strong><br><small style="color:var(--text2)">P-00284</small></td><td>Ultrasound OB</td><td>Dr. Santos</td><td><span class="badge badge-waiting">● Waiting</span></td><td>10:00 AM</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Queue mini -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="ti ti-layout-list"></i> Live Queue</div>
+            <button class="panel-action" onclick="navigateTo('queue')">Manage →</button>
+          </div>
+          <div class="queue-list">
+            <div class="queue-item active-item"><div class="queue-num qactive">1</div><div class="queue-info"><div class="queue-name">Santos, Ana M.</div><div class="queue-detail">Lab · Dr. Cruz</div></div><div class="queue-time"><span class="live-dot"></span>Now</div></div>
+            <div class="queue-item"><div class="queue-num qurgent">2</div><div class="queue-info"><div class="queue-name">Gonzales, Linda</div><div class="queue-detail">Imaging · Dr. Reyes</div></div><div class="queue-time">15 min</div></div>
+            <div class="queue-item"><div class="queue-num">3</div><div class="queue-info"><div class="queue-name">Dela Cruz, Mario</div><div class="queue-detail">Cardio · Dr. Ramos</div></div><div class="queue-time">22 min</div></div>
+            <div class="queue-item"><div class="queue-num">4</div><div class="queue-info"><div class="queue-name">Reyes, Carla</div><div class="queue-detail">OB · Dr. Santos</div></div><div class="queue-time">35 min</div></div>
+            <div class="queue-item"><div class="queue-num">5</div><div class="queue-info"><div class="queue-name">Torres, Pedro</div><div class="queue-detail">X-Ray · Dr. Lim</div></div><div class="queue-time">48 min</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom row: Appointments + Billing mini -->
+      <div class="two-col-equal">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="ti ti-calendar"></i> Today's Appointments</div>
+            <button class="panel-action" onclick="navigateTo('appointments')">Schedule new →</button>
+          </div>
+          <div class="appt-row"><div class="appt-time-col">8:00</div><div class="appt-dot done"></div><div class="appt-info"><div class="appt-name">Ocampo, Jose</div><div class="appt-type">CT-Scan · Dr. Lim</div></div><span class="badge badge-done">Done</span></div>
+          <div class="appt-row"><div class="appt-time-col">9:14</div><div class="appt-dot now"></div><div class="appt-info"><div class="appt-name">Santos, Ana</div><div class="appt-type">CBC + UA · Dr. Cruz</div></div><span class="badge badge-active">Active</span></div>
+          <div class="appt-row"><div class="appt-time-col">9:30</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Dela Cruz, Mario</div><div class="appt-type">ECG · Dr. Ramos</div></div><span class="badge badge-waiting">Waiting</span></div>
+          <div class="appt-row"><div class="appt-time-col">10:00</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Reyes, Carla</div><div class="appt-type">Ultrasound · Dr. Santos</div></div><span class="badge badge-waiting">Waiting</span></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="ti ti-file-invoice"></i> Billing Summary</div>
+            <button class="panel-action" onclick="navigateTo('billing')">View all →</button>
+          </div>
+          <div style="padding:12px 16px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+              <div style="background:var(--bg3);border-radius:8px;padding:10px"><div class="stat-label">Today's Revenue</div><div style="font-size:16px;font-weight:500;color:var(--text1)">₱28,450</div></div>
+              <div style="background:#FAECE7;border-radius:8px;padding:10px"><div class="stat-label">Pending Bills</div><div style="font-size:16px;font-weight:500;color:var(--hp-red)">₱7,200</div></div>
+            </div>
+            <div class="bill-summary-row"><span>Laboratory</span><span style="font-weight:500">₱9,000</span></div>
+            <div class="bill-summary-row"><span>Imaging / X-Ray</span><span style="font-weight:500">₱8,100</span></div>
+            <div class="bill-summary-row"><span>Cardiology</span><span style="font-weight:500">₱6,250</span></div>
+            <div class="bill-summary-row" style="border-bottom:none"><span>Consultation</span><span style="font-weight:500">₱5,100</span></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /dashboard -->
+
+    <!-- ─── PAGE: PATIENTS ──────────────────────────────────────── -->
+    <div class="page" id="page-patients">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Patients</div>
+          <div class="content-sub">All registered patients · 284 records</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary" onclick="openModal('export-modal')"><i class="ti ti-download"></i> Export</button>
+          <button class="btn-primary" onclick="navigateTo('registration')"><i class="ti ti-user-plus"></i> Register New</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+        <div class="stat-card"><div class="stat-label">Total Patients</div><div class="stat-value">284</div><div class="stat-delta up"><i class="ti ti-trending-up"></i> +8 this week</div></div>
+        <div class="stat-card"><div class="stat-label">Active Today</div><div class="stat-value">47</div><div class="stat-delta up"><i class="ti ti-users"></i> 11 in queue</div></div>
+        <div class="stat-card"><div class="stat-label">Senior Citizens</div><div class="stat-value">38</div><div class="stat-delta up"><i class="ti ti-heart"></i> 20% discounted</div></div>
+        <div class="stat-card"><div class="stat-label">HMO Patients</div><div class="stat-value">91</div><div class="stat-delta up"><i class="ti ti-shield"></i> 3 insurers</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="filter-bar">
+          <div class="search-wrap"><i class="ti ti-search"></i><input type="text" placeholder="Search by name, ID, or phone number…" oninput="filterPatients(this.value)" /></div>
+          <select class="filter-select"><option>All Status</option><option>Active</option><option>Waiting</option><option>Done</option><option>Urgent</option></select>
+          <select class="filter-select"><option>All Services</option><option>Laboratory</option><option>Imaging</option><option>Cardiology</option><option>OB-Gyne</option><option>Consultation</option></select>
+          <select class="filter-select"><option>All Doctors</option><option>Dr. Cruz</option><option>Dr. Ramos</option><option>Dr. Reyes</option><option>Dr. Lim</option><option>Dr. Santos</option></select>
+        </div>
+        <table class="data-table" id="patients-table">
+          <thead><tr><th>Patient ID</th><th>Full Name</th><th>Age / Sex</th><th>Contact</th><th>Service</th><th>Doctor</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>P-00280</td><td><strong>Ocampo, Jose R.</strong></td><td>67 / M</td><td>0917-234-5678</td><td>CT-Scan</td><td>Dr. Lim</td><td><span class="badge badge-done">Done</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+            <tr><td>P-00281</td><td><strong>Santos, Ana M.</strong></td><td>42 / F</td><td>0918-345-6789</td><td>CBC + Urinalysis</td><td>Dr. Cruz</td><td><span class="badge badge-active">In Progress</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+            <tr><td>P-00282</td><td><strong>Dela Cruz, Mario T.</strong></td><td>55 / M</td><td>0919-456-7890</td><td>ECG + Echo</td><td>Dr. Ramos</td><td><span class="badge badge-waiting">Waiting</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+            <tr><td>P-00283</td><td><strong>Gonzales, Linda P.</strong></td><td>48 / F</td><td>0920-567-8901</td><td>Mammography</td><td>Dr. Reyes</td><td><span class="badge badge-urgent">Urgent</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+            <tr><td>P-00284</td><td><strong>Reyes, Carla S.</strong></td><td>29 / F</td><td>0921-678-9012</td><td>Ultrasound OB</td><td>Dr. Santos</td><td><span class="badge badge-waiting">Waiting</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+            <tr><td>P-00285</td><td><strong>Torres, Pedro G.</strong></td><td>38 / M</td><td>0922-789-0123</td><td>Chest X-Ray</td><td>Dr. Lim</td><td><span class="badge badge-waiting">Waiting</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+            <tr><td>P-00286</td><td><strong>Bautista, Ruth C.</strong></td><td>62 / F</td><td>0923-890-1234</td><td>Consultation</td><td>Dr. Cruz</td><td><span class="badge badge-done">Done</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+            <tr><td>P-00287</td><td><strong>Villanueva, Mark A.</strong></td><td>45 / M</td><td>0924-901-2345</td><td>Pre-op Clearance</td><td>Dr. Cruz</td><td><span class="badge badge-waiting">Waiting</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px" onclick="openPatientModal()"><i class="ti ti-eye"></i></button><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-edit"></i></button></div></td></tr>
+          </tbody>
+        </table>
+        <div style="padding:10px 16px;border-top:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;color:var(--text2)">Showing 8 of 284 records</span>
+          <div style="display:flex;gap:4px">
+            <button class="btn-secondary" style="padding:4px 10px;font-size:11px"><i class="ti ti-chevron-left"></i></button>
+            <button class="btn-primary" style="padding:4px 10px;font-size:11px">1</button>
+            <button class="btn-secondary" style="padding:4px 10px;font-size:11px">2</button>
+            <button class="btn-secondary" style="padding:4px 10px;font-size:11px">3</button>
+            <button class="btn-secondary" style="padding:4px 10px;font-size:11px"><i class="ti ti-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /patients -->
+
+    <!-- ─── PAGE: APPOINTMENTS ─────────────────────────────────── -->
+    <div class="page" id="page-appointments">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Appointments</div>
+          <div class="content-sub">Schedule management · May 2026</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary"><i class="ti ti-calendar-month"></i> Month view</button>
+          <button class="btn-primary" onclick="openModal('appt-modal')"><i class="ti ti-plus"></i> New Appointment</button>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Calendar -->
+        <div>
+          <div class="panel">
+            <div class="panel-header">
+              <button class="btn-secondary" style="padding:4px 10px;font-size:12px"><i class="ti ti-chevron-left"></i></button>
+              <div class="panel-title" style="justify-content:center"><i class="ti ti-calendar"></i> May 2026</div>
+              <button class="btn-secondary" style="padding:4px 10px;font-size:12px"><i class="ti ti-chevron-right"></i></button>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-day-hdr">Su</div><div class="cal-day-hdr">Mo</div><div class="cal-day-hdr">Tu</div><div class="cal-day-hdr">We</div><div class="cal-day-hdr">Th</div><div class="cal-day-hdr">Fr</div><div class="cal-day-hdr">Sa</div>
+              <div class="cal-day other-month">27</div><div class="cal-day other-month">28</div><div class="cal-day other-month">29</div><div class="cal-day other-month">30</div><div class="cal-day has-appt">1</div><div class="cal-day has-appt">2</div><div class="cal-day">3</div>
+              <div class="cal-day">4</div><div class="cal-day has-appt">5</div><div class="cal-day has-appt">6</div><div class="cal-day has-appt">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div>
+              <div class="cal-day">11</div><div class="cal-day has-appt">12</div><div class="cal-day has-appt">13</div><div class="cal-day">14</div><div class="cal-day has-appt">15</div><div class="cal-day has-appt">16</div><div class="cal-day">17</div>
+              <div class="cal-day today has-appt">18</div><div class="cal-day has-appt">19</div><div class="cal-day has-appt">20</div><div class="cal-day">21</div><div class="cal-day has-appt">22</div><div class="cal-day">23</div><div class="cal-day">24</div>
+              <div class="cal-day">25</div><div class="cal-day has-appt">26</div><div class="cal-day">27</div><div class="cal-day has-appt">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+            </div>
+          </div>
+
+          <!-- Upcoming -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i class="ti ti-clock"></i> Upcoming This Week</div>
+              <span style="font-size:11px;color:var(--text2)">6 appointments</span>
+            </div>
+            <div class="appt-row"><div class="appt-time-col">May 19</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Aquino, Paz</div><div class="appt-type">Geriatric Consult · Dr. Cruz · 9:00 AM</div></div><span class="badge badge-waiting">Confirmed</span></div>
+            <div class="appt-row"><div class="appt-time-col">May 20</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Mendoza, Celia</div><div class="appt-type">Holter Monitoring · Dr. Ramos · 8:30 AM</div></div><span class="badge badge-waiting">Confirmed</span></div>
+            <div class="appt-row"><div class="appt-time-col">May 22</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Garcia, Lito</div><div class="appt-type">Treadmill Stress Test · Dr. Ramos · 10:00 AM</div></div><span class="badge badge-purple">Pending</span></div>
+          </div>
+        </div>
+
+        <!-- Today's schedule detail -->
+        <div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i class="ti ti-calendar-event"></i> May 18 — Today</div>
+              <span style="font-size:11px;color:var(--text2)">8 booked</span>
+            </div>
+            <div class="appt-row"><div class="appt-time-col">8:00</div><div class="appt-dot done"></div><div class="appt-info"><div class="appt-name">Ocampo, Jose</div><div class="appt-type">CT-Scan · Dr. Lim</div></div><span class="badge badge-done">Done</span></div>
+            <div class="appt-row"><div class="appt-time-col">8:30</div><div class="appt-dot done"></div><div class="appt-info"><div class="appt-name">Bautista, Ruth</div><div class="appt-type">Consultation · Dr. Cruz</div></div><span class="badge badge-done">Done</span></div>
+            <div class="appt-row"><div class="appt-time-col">9:14</div><div class="appt-dot now"></div><div class="appt-info"><div class="appt-name">Santos, Ana ●</div><div class="appt-type">CBC + UA · Dr. Cruz</div></div><span class="badge badge-active">Active</span></div>
+            <div class="appt-row"><div class="appt-time-col">9:30</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Dela Cruz, Mario</div><div class="appt-type">ECG · Dr. Ramos</div></div><span class="badge badge-waiting">Waiting</span></div>
+            <div class="appt-row"><div class="appt-time-col">9:45</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Gonzales, Linda</div><div class="appt-type">Mammography · Dr. Reyes</div></div><span class="badge badge-urgent">Urgent</span></div>
+            <div class="appt-row"><div class="appt-time-col">10:00</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Reyes, Carla</div><div class="appt-type">Ultrasound · Dr. Santos</div></div><span class="badge badge-waiting">Waiting</span></div>
+            <div class="appt-row"><div class="appt-time-col">10:30</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Villanueva, Mark</div><div class="appt-type">Pre-op · Dr. Cruz</div></div><span class="badge badge-waiting">Waiting</span></div>
+            <div class="appt-row"><div class="appt-time-col">11:00</div><div class="appt-dot pending"></div><div class="appt-info"><div class="appt-name">Torres, Pedro</div><div class="appt-type">Chest X-Ray · Dr. Lim</div></div><span class="badge badge-waiting">Waiting</span></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /appointments -->
+
+    <!-- ─── PAGE: QUEUE ─────────────────────────────────────────── -->
+    <div class="page" id="page-queue">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Queue Management</div>
+          <div class="content-sub"><span class="live-dot"></span>Live · 11 patients in system · Avg wait 18 min</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary"><i class="ti ti-printer"></i> Print Queue</button>
+          <button class="btn-primary" onclick="openModal('appt-modal')"><i class="ti ti-user-plus"></i> Add to Queue</button>
+        </div>
+      </div>
+
+      <!-- Queue stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+        <div class="stat-card"><div class="stat-label">Now Serving</div><div class="stat-value" style="color:var(--hp-teal)">#1</div><div class="stat-delta up"><i class="ti ti-user"></i> Santos, Ana</div></div>
+        <div class="stat-card"><div class="stat-label">Waiting</div><div class="stat-value">10</div><div class="stat-delta down"><i class="ti ti-clock"></i> Longest: 48 min</div></div>
+        <div class="stat-card"><div class="stat-label">Urgent</div><div class="stat-value" style="color:var(--hp-red)">1</div><div class="stat-delta down"><i class="ti ti-alert-triangle"></i> Gonzales, Linda</div></div>
+        <div class="stat-card"><div class="stat-label">Served Today</div><div class="stat-value">36</div><div class="stat-delta up"><i class="ti ti-check"></i> 77% done</div></div>
+      </div>
+
+      <!-- Kanban board -->
+      <div class="queue-board">
+        <!-- Waiting -->
+        <div>
+          <div class="queue-col-header" style="color:var(--hp-amber)"><i class="ti ti-clock"></i> Waiting <span class="badge badge-waiting" style="margin-left:auto">9</span></div>
+          <div class="queue-card"><div class="queue-card-num qurgent">!</div><div class="queue-card-body"><div class="queue-card-name">Gonzales, Linda</div><div class="queue-card-meta">Mammography · Dr. Reyes</div><div class="queue-card-time"><span class="badge badge-urgent" style="font-size:9px">Urgent</span> · 35 min ago</div></div></div>
+          <div class="queue-card"><div class="queue-card-num" style="background:var(--hp-navy)">3</div><div class="queue-card-body"><div class="queue-card-name">Dela Cruz, Mario</div><div class="queue-card-meta">ECG + Echo · Dr. Ramos</div><div class="queue-card-time">22 min wait</div></div></div>
+          <div class="queue-card"><div class="queue-card-num" style="background:var(--hp-navy)">4</div><div class="queue-card-body"><div class="queue-card-name">Reyes, Carla</div><div class="queue-card-meta">Ultrasound OB · Dr. Santos</div><div class="queue-card-time">35 min wait</div></div></div>
+          <div class="queue-card"><div class="queue-card-num" style="background:var(--hp-navy)">5</div><div class="queue-card-body"><div class="queue-card-name">Torres, Pedro</div><div class="queue-card-meta">Chest X-Ray · Dr. Lim</div><div class="queue-card-time">48 min wait</div></div></div>
+          <div class="queue-card"><div class="queue-card-num" style="background:var(--hp-navy)">6</div><div class="queue-card-body"><div class="queue-card-name">Villanueva, Mark</div><div class="queue-card-meta">Pre-op Clearance · Dr. Cruz</div><div class="queue-card-time">12 min wait</div></div></div>
+        </div>
+
+        <!-- In Progress -->
+        <div>
+          <div class="queue-col-header" style="color:var(--hp-teal)"><i class="ti ti-loader"></i> In Progress <span class="badge badge-active" style="margin-left:auto">1</span></div>
+          <div class="queue-card" style="border-color:var(--hp-teal);box-shadow:0 2px 10px rgba(13,124,107,.12)">
+            <div class="queue-card-num a">1</div>
+            <div class="queue-card-body">
+              <div class="queue-card-name">Santos, Ana M.</div>
+              <div class="queue-card-meta">CBC + Urinalysis · Dr. Cruz</div>
+              <div class="queue-card-time"><span class="live-dot"></span>Started 9:14 AM</div>
+              <div style="margin-top:8px;display:flex;gap:6px">
+                <button class="btn-primary" style="padding:4px 10px;font-size:10px"><i class="ti ti-check"></i> Mark Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Done -->
+        <div>
+          <div class="queue-col-header" style="color:#27500A"><i class="ti ti-circle-check"></i> Completed <span class="badge badge-done" style="margin-left:auto">36</span></div>
+          <div class="queue-card" style="opacity:.7"><div class="queue-card-num" style="background:#27500A">✓</div><div class="queue-card-body"><div class="queue-card-name">Ocampo, Jose</div><div class="queue-card-meta">CT-Scan · Dr. Lim</div><div class="queue-card-time">8:00 – 8:48 AM</div></div></div>
+          <div class="queue-card" style="opacity:.7"><div class="queue-card-num" style="background:#27500A">✓</div><div class="queue-card-body"><div class="queue-card-name">Bautista, Ruth</div><div class="queue-card-meta">Consultation · Dr. Cruz</div><div class="queue-card-time">8:30 – 9:05 AM</div></div></div>
+          <div class="queue-card" style="opacity:.7"><div class="queue-card-num" style="background:#27500A">✓</div><div class="queue-card-body"><div class="queue-card-name">Aquino, Paz</div><div class="queue-card-meta">Geriatric Consult · Dr. Cruz</div><div class="queue-card-time">7:45 – 8:20 AM</div></div></div>
+        </div>
+      </div>
+
+      <!-- Full queue table -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><i class="ti ti-table"></i> Full Queue List</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-secondary" style="padding:4px 10px;font-size:11px"><i class="ti ti-refresh"></i> Refresh</button>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Patient</th><th>Service</th><th>Doctor</th><th>Wait Time</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr style="background:var(--hp-teal-bg)"><td><strong style="color:var(--hp-teal)">1</strong></td><td><strong>Santos, Ana M.</strong></td><td>CBC + Urinalysis</td><td>Dr. Cruz</td><td><span class="live-dot"></span>Active</td><td><span class="badge badge-active">In Progress</span></td><td><div class="actions"><button class="btn-primary" style="padding:4px 10px;font-size:10px">Mark Done</button></div></td></tr>
+            <tr><td><strong style="color:var(--hp-red)">!</strong></td><td><strong>Gonzales, Linda</strong></td><td>Mammography</td><td>Dr. Reyes</td><td>35 min</td><td><span class="badge badge-urgent">Urgent</span></td><td><div class="actions"><button class="btn-primary" style="padding:4px 10px;font-size:10px;background:var(--hp-red)">Prioritize</button></div></td></tr>
+            <tr><td>3</td><td>Dela Cruz, Mario</td><td>ECG + Echo</td><td>Dr. Ramos</td><td>22 min</td><td><span class="badge badge-waiting">Waiting</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-arrow-up"></i></button></div></td></tr>
+            <tr><td>4</td><td>Reyes, Carla</td><td>Ultrasound OB</td><td>Dr. Santos</td><td>35 min</td><td><span class="badge badge-waiting">Waiting</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-arrow-up"></i></button></div></td></tr>
+            <tr><td>5</td><td>Torres, Pedro</td><td>Chest X-Ray</td><td>Dr. Lim</td><td>48 min</td><td><span class="badge badge-waiting">Waiting</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-arrow-up"></i></button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!-- /queue -->
+
+    <!-- ─── PAGE: REGISTRATION ──────────────────────────────────── -->
+    <div class="page" id="page-registration">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Patient Registration</div>
+          <div class="content-sub">Register a new patient or walk-in</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary" onclick="navigateTo('patients')"><i class="ti ti-arrow-left"></i> Back to Patients</button>
+        </div>
+      </div>
+
+      <div class="two-col-equal">
+        <!-- Registration form -->
+        <div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title"><i class="ti ti-user-plus"></i> Personal Information</div></div>
+            <div style="padding:16px">
+              <div class="form-section">Basic Information</div>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label">Last Name <span>*</span></label><input type="text" class="form-input" placeholder="e.g. Santos" /></div>
+                <div class="form-group"><label class="form-label">First Name <span>*</span></label><input type="text" class="form-input" placeholder="e.g. Ana Marie" /></div>
+                <div class="form-group"><label class="form-label">Middle Name</label><input type="text" class="form-input" placeholder="Optional" /></div>
+                <div class="form-group"><label class="form-label">Suffix</label><select class="form-select"><option>None</option><option>Jr.</option><option>Sr.</option><option>III</option></select></div>
+                <div class="form-group"><label class="form-label">Date of Birth <span>*</span></label><input type="date" class="form-input" /></div>
+                <div class="form-group"><label class="form-label">Sex <span>*</span></label><select class="form-select"><option>-- Select --</option><option>Male</option><option>Female</option></select></div>
+                <div class="form-group"><label class="form-label">Civil Status</label><select class="form-select"><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></div>
+                <div class="form-group"><label class="form-label">Nationality</label><input type="text" class="form-input" value="Filipino" /></div>
+              </div>
+
+              <div class="form-section">Contact Information</div>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label">Mobile Number <span>*</span></label><input type="tel" class="form-input" placeholder="09XX-XXX-XXXX" /></div>
+                <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" placeholder="patient@email.com" /></div>
+                <div class="form-group full"><label class="form-label">Home Address <span>*</span></label><input type="text" class="form-input" placeholder="Street, Barangay, City, Province" /></div>
+              </div>
+
+              <div class="form-section">Emergency Contact</div>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label">Contact Person</label><input type="text" class="form-input" placeholder="Full name" /></div>
+                <div class="form-group"><label class="form-label">Relationship</label><input type="text" class="form-input" placeholder="e.g. Spouse, Parent" /></div>
+                <div class="form-group"><label class="form-label">Contact Number</label><input type="tel" class="form-input" placeholder="09XX-XXX-XXXX" /></div>
+                <div class="form-group"><label class="form-label">Senior / PWD</label><select class="form-select"><option>No</option><option>Senior Citizen</option><option>PWD</option></select></div>
+              </div>
+
+              <div class="form-section">Insurance / HMO</div>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label">HMO Provider</label><select class="form-select"><option>None / Walk-in</option><option>PhilHealth</option><option>Maxicare</option><option>MediCard</option><option>Intellicare</option><option>EastWest</option></select></div>
+                <div class="form-group"><label class="form-label">HMO Card Number</label><input type="text" class="form-input" placeholder="Card or LOA number" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visit details -->
+        <div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title"><i class="ti ti-stethoscope"></i> Visit Details</div></div>
+            <div style="padding:16px">
+              <div class="form-section">Service Request</div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Service Type <span>*</span></label>
+                <select class="form-select">
+                  <option>-- Select Service --</option>
+                  <optgroup label="Laboratory">
+                    <option>CBC (Complete Blood Count)</option>
+                    <option>Urinalysis</option>
+                    <option>Blood Chemistry Panel</option>
+                    <option>Blood Typing</option>
+                  </optgroup>
+                  <optgroup label="Imaging">
+                    <option>Chest X-Ray</option>
+                    <option>CT-Scan</option>
+                    <option>Digital Mammography</option>
+                    <option>Ultrasound</option>
+                  </optgroup>
+                  <optgroup label="Cardiology">
+                    <option>ECG</option>
+                    <option>Echocardiography</option>
+                    <option>Treadmill Stress Test</option>
+                    <option>Holter Monitoring</option>
+                    <option>Ambulatory Blood Pressure Monitoring</option>
+                  </optgroup>
+                  <optgroup label="Consultation">
+                    <option>Multi-Specialty Consultation</option>
+                    <option>Pre-employment Medical</option>
+                    <option>Pre-operative Clearance</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Requesting Doctor</label>
+                <select class="form-select"><option>-- Walk-in (no referral) --</option><option>Dr. Cruz (Internal Medicine)</option><option>Dr. Ramos (Cardiology)</option><option>Dr. Reyes (OB-Gyne)</option><option>Dr. Lim (Radiology)</option><option>Dr. Santos (OB-Gyne)</option></select>
+              </div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Appointment Date <span>*</span></label><input type="date" class="form-input" /></div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Preferred Time</label>
+                <select class="form-select"><option>Walk-in / ASAP</option><option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option></select>
+              </div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Chief Complaint / Remarks</label><textarea class="form-textarea" placeholder="Briefly describe symptoms or reason for visit…"></textarea></div>
+
+              <div class="form-section">Payment</div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Payment Method</label>
+                <select class="form-select"><option>Cash</option><option>GCash / Maya</option><option>Credit Card</option><option>HMO / Insurance</option><option>PhilHealth Only</option></select>
+              </div>
+
+              <div class="form-section" style="margin-top:20px">Data Privacy Consent</div>
+              <div style="background:var(--bg3);border-radius:8px;padding:12px;font-size:11.5px;color:var(--text2);line-height:1.6;margin-bottom:12px">
+                By registering, the patient consents to Hi-Precision Diagnostics collecting, storing, and processing their personal and medical information in accordance with the <strong>Data Privacy Act of 2012 (RA 10173)</strong>. Information will be used solely for medical, billing, and administrative purposes.
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:16px">
+                <input type="checkbox" id="consent" style="margin-top:2px;accent-color:var(--hp-teal)" />
+                <label for="consent" style="font-size:12px;color:var(--text1);cursor:pointer">Patient (or guardian) has verbally confirmed consent and understands the data privacy notice above.</label>
+              </div>
+
+              <div style="display:flex;gap:8px">
+                <button class="btn-primary" style="flex:1;justify-content:center" onclick="showToast('Patient registered successfully! Queue number assigned.')"><i class="ti ti-check"></i> Register &amp; Add to Queue</button>
+                <button class="btn-secondary"><i class="ti ti-x"></i> Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /registration -->
+
+    <!-- ─── PAGE: BILLING ───────────────────────────────────────── -->
+    <div class="page" id="page-billing">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Billing & Payments</div>
+          <div class="content-sub">Manage invoices and collections · May 18, 2026</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary"><i class="ti ti-download"></i> Export</button>
+          <button class="btn-primary" onclick="openModal('billing-modal')"><i class="ti ti-receipt"></i> New Invoice</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Today's Revenue</div><div class="stat-value">₱28,450</div><div class="stat-delta up"><i class="ti ti-trending-up"></i> +18% vs yesterday</div></div>
+        <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--hp-amber)">₱7,200</div><div class="stat-delta down"><i class="ti ti-clock"></i> 4 invoices</div></div>
+        <div class="stat-card"><div class="stat-label">HMO Claims</div><div class="stat-value">₱12,100</div><div class="stat-delta up"><i class="ti ti-shield"></i> 6 approved</div></div>
+        <div class="stat-card"><div class="stat-label">Monthly Total</div><div class="stat-value">₱384K</div><div class="stat-delta up"><i class="ti ti-calendar"></i> ₱384,200</div></div>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="bill-status-bar">
+        <div class="bill-status-chip active" onclick="filterBilling(this)">All</div>
+        <div class="bill-status-chip" onclick="filterBilling(this)">Paid</div>
+        <div class="bill-status-chip" onclick="filterBilling(this)">Pending</div>
+        <div class="bill-status-chip" onclick="filterBilling(this)">HMO</div>
+        <div class="bill-status-chip" onclick="filterBilling(this)">Overdue</div>
+      </div>
+
+      <div class="two-col-equal">
+        <!-- Invoice table -->
+        <div style="grid-column:1/-1">
+          <div class="panel">
+            <div class="filter-bar">
+              <div class="search-wrap"><i class="ti ti-search"></i><input type="text" placeholder="Search by patient name or invoice number…" /></div>
+              <select class="filter-select"><option>All Services</option><option>Laboratory</option><option>Imaging</option><option>Cardiology</option><option>Consultation</option></select>
+              <select class="filter-select"><option>All Payment Methods</option><option>Cash</option><option>GCash</option><option>HMO</option><option>Credit Card</option></select>
+            </div>
+            <table class="data-table">
+              <thead><tr><th>Invoice #</th><th>Patient</th><th>Service</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr><td><strong>INV-0180</strong></td><td>Ocampo, Jose</td><td>CT-Scan (Head)</td><td><strong>₱3,500</strong></td><td>Cash</td><td>May 18</td><td><span class="badge badge-done">Paid</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-printer"></i></button></div></td></tr>
+                <tr><td><strong>INV-0181</strong></td><td>Santos, Ana M.</td><td>CBC + Urinalysis</td><td><strong>₱950</strong></td><td>GCash</td><td>May 18</td><td><span class="badge badge-active">In Progress</span></td><td><div class="actions"><button class="btn-primary" style="padding:4px 9px;font-size:11px">Collect</button></div></td></tr>
+                <tr><td><strong>INV-0182</strong></td><td>Bautista, Ruth</td><td>Consultation</td><td><strong>₱800</strong></td><td>PhilHealth</td><td>May 18</td><td><span class="badge badge-done">Paid</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-printer"></i></button></div></td></tr>
+                <tr><td><strong>INV-0183</strong></td><td>Dela Cruz, Mario</td><td>ECG + Echo</td><td><strong>₱2,800</strong></td><td>Maxicare</td><td>May 18</td><td><span class="badge badge-waiting">Pending HMO</span></td><td><div class="actions"><button class="btn-primary" style="padding:4px 9px;font-size:11px">Collect</button></div></td></tr>
+                <tr><td><strong>INV-0184</strong></td><td>Gonzales, Linda</td><td>Mammography</td><td><strong>₱2,200</strong></td><td>Cash</td><td>May 18</td><td><span class="badge badge-waiting">Pending</span></td><td><div class="actions"><button class="btn-primary" style="padding:4px 9px;font-size:11px">Collect</button></div></td></tr>
+                <tr><td><strong>INV-0179</strong></td><td>Aquino, Paz</td><td>Geriatric Consult</td><td><strong>₱1,200</strong></td><td>Cash</td><td>May 18</td><td><span class="badge badge-done">Paid</span></td><td><div class="actions"><button class="btn-secondary" style="padding:4px 9px;font-size:11px"><i class="ti ti-printer"></i></button></div></td></tr>
+                <tr><td><strong>INV-0175</strong></td><td>Garcia, Lito</td><td>Treadmill Stress</td><td><strong>₱3,800</strong></td><td>MediCard</td><td>May 17</td><td><span class="badge badge-urgent">Overdue</span></td><td><div class="actions"><button class="btn-danger" style="padding:4px 9px;font-size:11px">Follow-up</button></div></td></tr>
+              </tbody>
+            </table>
+            <div style="padding:10px 16px;border-top:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:11px;color:var(--text2)">Showing 7 of 180 invoices</span>
+              <div style="display:flex;gap:4px">
+                <button class="btn-secondary" style="padding:4px 10px;font-size:11px"><i class="ti ti-chevron-left"></i></button>
+                <button class="btn-primary" style="padding:4px 10px;font-size:11px">1</button>
+                <button class="btn-secondary" style="padding:4px 10px;font-size:11px">2</button>
+                <button class="btn-secondary" style="padding:4px 10px;font-size:11px"><i class="ti ti-chevron-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /billing -->
+
+    <!-- ─── PAGE: REPORTS ───────────────────────────────────────── -->
+    <div class="page" id="page-reports">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Reports & Analytics</div>
+          <div class="content-sub">Generate and download operational reports</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <select class="filter-select" style="font-size:12px">
+            <option>Today</option><option>This Week</option><option selected>This Month</option><option>Custom Range</option>
+          </select>
+          <button class="btn-primary"><i class="ti ti-download"></i> Export All</button>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Monthly Patients</div><div class="stat-value">1,204</div><div class="stat-delta up"><i class="ti ti-trending-up"></i> +9% vs last month</div></div>
+        <div class="stat-card"><div class="stat-label">Monthly Revenue</div><div class="stat-value">₱384K</div><div class="stat-delta up"><i class="ti ti-trending-up"></i> +14% growth</div></div>
+        <div class="stat-card"><div class="stat-label">Lab Tests Done</div><div class="stat-value">876</div><div class="stat-delta up"><i class="ti ti-flask"></i> 72% of services</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Wait Time</div><div class="stat-value">21 min</div><div class="stat-delta up"><i class="ti ti-clock"></i> -3 min improvement</div></div>
+      </div>
+
+      <div class="two-col-equal">
+        <!-- Revenue chart -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="ti ti-chart-bar"></i> Daily Revenue — May 2026</div>
+            <span style="font-size:11px;color:var(--text2)">₱384,200 total</span>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-bar-group" id="rev-chart">
+              <!-- rendered by JS -->
+            </div>
+            <div class="chart-labels" id="rev-labels"></div>
+          </div>
+        </div>
+
+        <!-- Service breakdown -->
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title"><i class="ti ti-chart-pie"></i> Service Breakdown</div></div>
+          <div style="padding:12px 16px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Laboratory</span><strong>38% · ₱146K</strong></div>
+                <div style="background:var(--bg3);border-radius:4px;height:6px"><div style="background:var(--hp-teal);width:38%;height:100%;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Imaging / X-Ray</span><strong>27% · ₱104K</strong></div>
+                <div style="background:var(--bg3);border-radius:4px;height:6px"><div style="background:var(--hp-teal-mid);width:27%;height:100%;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Cardiology</span><strong>20% · ₱77K</strong></div>
+                <div style="background:var(--bg3);border-radius:4px;height:6px"><div style="background:var(--hp-teal-light);width:20%;height:100%;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Consultation</span><strong>10% · ₱38K</strong></div>
+                <div style="background:var(--bg3);border-radius:4px;height:6px"><div style="background:var(--hp-amber);width:10%;height:100%;border-radius:4px"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Home Service</span><strong>5% · ₱19K</strong></div>
+                <div style="background:var(--bg3);border-radius:4px;height:6px"><div style="background:var(--hp-red);width:5%;height:100%;border-radius:4px"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Downloadable reports -->
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="ti ti-files"></i> Available Reports</div></div>
+        <div style="padding:12px 16px">
+          <div class="report-card">
+            <div class="report-card-left"><div class="report-icon green"><i class="ti ti-users"></i></div><div><div class="report-name">Daily Patient Census</div><div class="report-meta">Generated today · 47 patients · May 18, 2026</div></div></div>
+            <div class="report-actions"><button class="btn-secondary" style="font-size:11px"><i class="ti ti-eye"></i> Preview</button><button class="btn-primary" style="font-size:11px" onclick="showToast('Downloading Daily Patient Census…')"><i class="ti ti-download"></i> Download PDF</button></div>
+          </div>
+          <div class="report-card">
+            <div class="report-card-left"><div class="report-icon blue"><i class="ti ti-file-invoice"></i></div><div><div class="report-name">Monthly Revenue Report</div><div class="report-meta">May 2026 · ₱384,200 total · 1,204 transactions</div></div></div>
+            <div class="report-actions"><button class="btn-secondary" style="font-size:11px"><i class="ti ti-eye"></i> Preview</button><button class="btn-primary" style="font-size:11px" onclick="showToast('Downloading Monthly Revenue Report…')"><i class="ti ti-download"></i> Download PDF</button></div>
+          </div>
+          <div class="report-card">
+            <div class="report-card-left"><div class="report-icon amber"><i class="ti ti-flask"></i></div><div><div class="report-name">Laboratory Utilization Report</div><div class="report-meta">May 2026 · 876 tests · Top: CBC (234 requests)</div></div></div>
+            <div class="report-actions"><button class="btn-secondary" style="font-size:11px"><i class="ti ti-eye"></i> Preview</button><button class="btn-primary" style="font-size:11px" onclick="showToast('Downloading Lab Utilization Report…')"><i class="ti ti-download"></i> Download PDF</button></div>
+          </div>
+          <div class="report-card">
+            <div class="report-card-left"><div class="report-icon red"><i class="ti ti-heart-rate-monitor"></i></div><div><div class="report-name">Queue Performance Report</div><div class="report-meta">May 2026 · Avg wait: 21 min · Peak: 10:00–11:00 AM</div></div></div>
+            <div class="report-actions"><button class="btn-secondary" style="font-size:11px"><i class="ti ti-eye"></i> Preview</button><button class="btn-primary" style="font-size:11px" onclick="showToast('Downloading Queue Performance Report…')"><i class="ti ti-download"></i> Download PDF</button></div>
+          </div>
+          <div class="report-card" style="border-bottom:none">
+            <div class="report-card-left"><div class="report-icon green"><i class="ti ti-shield"></i></div><div><div class="report-name">HMO / PhilHealth Claims Summary</div><div class="report-meta">May 2026 · ₱91,500 filed · 3 insurers · 6 pending</div></div></div>
+            <div class="report-actions"><button class="btn-secondary" style="font-size:11px"><i class="ti ti-eye"></i> Preview</button><button class="btn-primary" style="font-size:11px" onclick="showToast('Downloading HMO Claims Summary…')"><i class="ti ti-download"></i> Download PDF</button></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /reports -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODALS
+═══════════════════════════════════════════════════════════════ -->
+
+<!-- Patient detail modal -->
+<div class="modal-overlay" id="patient-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Patient Profile</div>
+      <button class="modal-close" onclick="closeModal('patient-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="patient-profile-card" style="background:var(--hp-teal-bg)">
+        <div class="patient-big-avatar">AS</div>
+        <div>
+          <div class="patient-profile-name">Santos, Ana Marie</div>
+          <div class="patient-profile-meta">P-00281 · Female, 42 yrs · March 3, 1984 · 0918-345-6789</div>
+          <div class="patient-profile-tags"><span class="badge badge-urgent">HPN</span><span class="badge badge-purple">T2DM</span><span class="badge badge-done">Senior Discount: No</span></div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active">Visit History</button>
+        <button class="tab-btn">Lab Results</button>
+        <button class="tab-btn">Billing</button>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Service</th><th>Doctor</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>May 18, 2026</td><td>CBC + Urinalysis</td><td>Dr. Cruz</td><td><span class="badge badge-active">Pending</span></td></tr>
+          <tr><td>Apr 22, 2026</td><td>HbA1c + Lipid Panel</td><td>Dr. Cruz</td><td><span class="badge badge-done">Released</span></td></tr>
+          <tr><td>Mar 5, 2026</td><td>Chest X-Ray</td><td>Dr. Lim</td><td><span class="badge badge-done">Released</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('patient-modal')">Close</button>
+      <button class="btn-primary" onclick="navigateTo('billing');closeModal('patient-modal')"><i class="ti ti-receipt"></i> View Invoice</button>
+    </div>
+  </div>
+</div>
+
+<!-- New appointment modal -->
+<div class="modal-overlay" id="appt-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">New Appointment</div>
+      <button class="modal-close" onclick="closeModal('appt-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Patient <span style="color:var(--hp-red)">*</span></label><input type="text" class="form-input" placeholder="Search by name or ID…" /></div>
+        <div class="form-group"><label class="form-label">Service <span style="color:var(--hp-red)">*</span></label><select class="form-select"><option>-- Select --</option><option>CBC</option><option>X-Ray</option><option>ECG</option><option>Ultrasound</option><option>CT-Scan</option><option>Consultation</option></select></div>
+        <div class="form-group"><label class="form-label">Doctor</label><select class="form-select"><option>Dr. Cruz</option><option>Dr. Ramos</option><option>Dr. Reyes</option><option>Dr. Lim</option><option>Dr. Santos</option></select></div>
+        <div class="form-group"><label class="form-label">Date <span style="color:var(--hp-red)">*</span></label><input type="date" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Time</label><select class="form-select"><option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>1:00 PM</option><option>2:00 PM</option></select></div>
+        <div class="form-group full"><label class="form-label">Notes</label><textarea class="form-textarea" placeholder="Additional notes…" style="min-height:56px"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('appt-modal')">Cancel</button>
+      <button class="btn-primary" onclick="closeModal('appt-modal');showToast('Appointment scheduled successfully!')"><i class="ti ti-check"></i> Confirm Appointment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Billing modal -->
+<div class="modal-overlay" id="billing-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">New Invoice</div>
+      <button class="modal-close" onclick="closeModal('billing-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Patient <span style="color:var(--hp-red)">*</span></label><input type="text" class="form-input" placeholder="Search by name or ID…" /></div>
+        <div class="form-group"><label class="form-label">Service</label><select class="form-select"><option>CBC</option><option>X-Ray</option><option>ECG</option><option>CT-Scan</option><option>Consultation</option></select></div>
+        <div class="form-group"><label class="form-label">Amount (₱)</label><input type="number" class="form-input" placeholder="0.00" /></div>
+        <div class="form-group"><label class="form-label">Payment Method</label><select class="form-select"><option>Cash</option><option>GCash / Maya</option><option>Credit Card</option><option>HMO</option><option>PhilHealth</option></select></div>
+        <div class="form-group"><label class="form-label">Discount</label><select class="form-select"><option>None</option><option>Senior Citizen (20%)</option><option>PWD (20%)</option><option>Employee</option></select></div>
+        <div class="form-group full"><label class="form-label">Remarks</label><textarea class="form-textarea" placeholder="Optional notes…" style="min-height:52px"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('billing-modal')">Cancel</button>
+      <button class="btn-primary" onclick="closeModal('billing-modal');showToast('Invoice INV-0188 created successfully!')"><i class="ti ti-receipt"></i> Create Invoice</button>
+    </div>
+  </div>
+</div>
+
+<!-- Export modal -->
+<div class="modal-overlay" id="export-modal">
+  <div class="modal" style="width:380px">
+    <div class="modal-header">
+      <div class="modal-title">Export Patient Records</div>
+      <button class="modal-close" onclick="closeModal('export-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:12px"><label class="form-label">Format</label><select class="form-select"><option>PDF</option><option>CSV / Excel</option></select></div>
+      <div class="form-group" style="margin-bottom:12px"><label class="form-label">Date Range</label><input type="date" class="form-input" /></div>
+      <div style="background:#FEF5E7;border:.5px solid #f5d89a;border-radius:8px;padding:10px 13px;font-size:11.5px;color:#633806"><i class="ti ti-lock" style="margin-right:5px"></i>Exported files are protected under the Data Privacy Act of 2012. Handle with care.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('export-modal')">Cancel</button>
+      <button class="btn-primary" onclick="closeModal('export-modal');showToast('Export started — file will be ready shortly.')"><i class="ti ti-download"></i> Export</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--hp-navy);color:#fff;padding:11px 18px;border-radius:10px;font-size:12.5px;font-family:var(--font);box-shadow:0 6px 24px rgba(0,0,0,.25);display:flex;align-items:center;gap:8px;z-index:999;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none">
+  <i class="ti ti-circle-check" style="color:var(--hp-teal-light);font-size:16px"></i>
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+// ── Role definitions ──────────────────────────────────────────────────────
+const roles = {
+  frontdesk: {
+    user: { initials:'MR', label:'Maria Reyes · Front Desk' },
+    nav: [
+      { section:'Main' },
+      { icon:'ti-layout-dashboard', label:'Dashboard',    page:'dashboard' },
+      { icon:'ti-users',            label:'Patients',     page:'patients' },
+      { icon:'ti-calendar',         label:'Appointments', page:'appointments', badge:'8' },
+      { icon:'ti-layout-list',      label:'Queue',        page:'queue',   badge:'11' },
+      { section:'Services' },
+      { icon:'ti-user-plus',        label:'Registration', page:'registration' },
+      { icon:'ti-receipt',          label:'Billing',      page:'billing' },
+      { icon:'ti-file-text',        label:'Reports',      page:'reports' },
+      { section:'Account' },
+    ]
+  },
+  nurse: {
+    user: { initials:'JD', label:'Jane Domingo · Nurse' },
+    nav: [
+      { section:'Main' },
+      { icon:'ti-layout-dashboard',   label:'Dashboard',    page:'dashboard' },
+      { icon:'ti-heart-rate-monitor', label:'Monitoring',   page:'queue' },
+      { icon:'ti-layout-list',        label:'Patient Queue',page:'queue', badge:'11' },
+      { section:'Clinical' },
+      { icon:'ti-activity',  label:'Vital Signs',  page:'patients' },
+      { icon:'ti-pill',      label:'Medications',  page:'patients' },
+      { icon:'ti-flask',     label:'Lab Requests', page:'reports',  badge:'3' },
+      { icon:'ti-file-text', label:'Treatment Log',page:'reports' },
+      { section:'Account' },
+    ]
+  },
+  doctor: {
+    user: { initials:'AC', label:'Dr. Andres Cruz · IM' },
+    nav: [
+      { section:'Main' },
+      { icon:'ti-layout-dashboard', label:'Dashboard',      page:'dashboard' },
+      { icon:'ti-calendar',         label:'Schedule',       page:'appointments', badge:'5' },
+      { section:'Clinical' },
+      { icon:'ti-notes-medical',    label:'EMR',            page:'patients' },
+      { icon:'ti-stethoscope',      label:'Consultations',  page:'patients' },
+      { icon:'ti-microscope',       label:'Lab Results',    page:'reports', badge:'2' },
+      { icon:'ti-pill',             label:'Prescriptions',  page:'patients' },
+      { icon:'ti-file-certificate', label:'Certificates',   page:'reports' },
+      { icon:'ti-chart-line',       label:'Treatment Plans',page:'reports' },
+      { section:'Account' },
+    ]
+  }
+};
+
+let currentRole = 'frontdesk';
+let currentPage = 'dashboard';
+
+// ── Navigation ────────────────────────────────────────────────────────────
+function navigateTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) { el.classList.add('active'); currentPage = page; }
+  document.getElementById('content').scrollTop = 0;
+  buildSidebar(currentRole);
+}
+
+function buildSidebar(role) {
+  const sidebar = document.getElementById('sidebar');
+  const data = roles[role];
+  let html = '';
+  data.nav.forEach(item => {
+    if (item.section) {
+      html += `<div class="sidebar-section">${item.section}</div>`;
+    } else {
+      const active = item.page === currentPage ? ' active' : '';
+      html += `<div class="nav-item${active}" onclick="navigateTo('${item.page}')">
+        <i class="ti ${item.icon}"></i>
+        <span>${item.label}</span>
+        ${item.badge ? `<span class="nav-badge">${item.badge}</span>` : ''}
+      </div>`;
+    }
+  });
+  html += `<div class="sidebar-footer">
+    <div class="sidebar-footer-item"><i class="ti ti-settings"></i> Settings</div>
+    <div class="sidebar-footer-item"><i class="ti ti-help-circle"></i> Support</div>
+    <div class="sidebar-footer-item" onclick="showToast('Signed out successfully.')"><i class="ti ti-logout"></i> Sign out</div>
+  </div>`;
+  sidebar.innerHTML = html;
+}
+
+function switchRole(role, btn) {
+  currentRole = role;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const u = roles[role].user;
+  document.getElementById('user-initials').textContent = u.initials;
+  document.getElementById('user-label').textContent    = u.label;
+  navigateTo('dashboard');
+}
+
+// ── Modals ────────────────────────────────────────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+function openPatientModal() { openModal('patient-modal'); }
+
+// Close modal on backdrop click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.style.opacity = '1'; t.style.transform = 'translateY(0)'; t.style.pointerEvents = 'all';
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(10px)'; t.style.pointerEvents = 'none'; }, 3000);
+}
+
+// ── Patient filter ────────────────────────────────────────────────────────
+function filterPatients(val) {
+  const rows = document.querySelectorAll('#patients-table tbody tr');
+  rows.forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
+  });
+}
+
+// ── Billing filter chips ───────────────────────────────────────────────────
+function filterBilling(chip) {
+  document.querySelectorAll('.bill-status-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+}
+
+// ── Revenue chart (CSS bars) ───────────────────────────────────────────────
+const revData = [
+  {day:'1',v:62},{day:'2',v:75},{day:'3',v:55},{day:'4',v:0},{day:'5',v:88},
+  {day:'6',v:91},{day:'7',v:0},{day:'8',v:70},{day:'9',v:82},{day:'10',v:67},
+  {day:'11',v:0},{day:'12',v:95},{day:'13',v:88},{day:'14',v:72},{day:'15',v:100},
+  {day:'16',v:84},{day:'17',v:0},{day:'18',v:74}
+];
+const maxV = Math.max(...revData.map(d=>d.v));
+const chartEl = document.getElementById('rev-chart');
+const labelEl = document.getElementById('rev-labels');
+if(chartEl){
+  revData.forEach(d=>{
+    const pct = d.v ? Math.round((d.v/maxV)*90)+10 : 0;
+    chartEl.innerHTML += `<div class="chart-bar" style="height:${pct}%" title="May ${d.day}: ₱${d.v}K"><span>₱${d.v>0?d.v+'K':''}</span></div>`;
+    labelEl.innerHTML += `<div class="chart-label">${d.day}</div>`;
+  });
+}
+
+// ── Tab switching in patient modal ────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    this.closest('.tab-bar').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ── Init ─────────────────────────────────────────────────────────────────
+buildSidebar('frontdesk');
+</script>
+</body>
+</html>

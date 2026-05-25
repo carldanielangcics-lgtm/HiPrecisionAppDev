@@ -15,14 +15,17 @@ export default function Sidebar({ currentPage, onNavigate, getBadgeVal, onSignOu
       html.push(
         <div
           key={item.page}
-          className={`nav-item${active} d-flex align-items-center justify-content-between`}
+          className={`nav-item${active}`}
           onClick={() => onNavigate(item.page)}
           onKeyDown={(e) => e.key === 'Enter' && onNavigate(item.page)}
           role="button"
           tabIndex={0}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <i className={`ti ${item.icon}`} />
-          <span>{item.label}</span>
+          <span className="nav-item-inner" style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+            <i className={`ti ${item.icon}`} />
+            <span className="nav-label">{item.label}</span>
+          </span>
           {bv ? <span className="nav-badge">{bv}</span> : null}
         </div>
       );
@@ -30,16 +33,16 @@ export default function Sidebar({ currentPage, onNavigate, getBadgeVal, onSignOu
   });
 
   return (
-    <div className="sidebar d-flex flex-column" id="sidebar">
+    <div className="sidebar" id="sidebar">
       {html}
-      <div className="sidebar-footer mt-auto">
-        <div className="sidebar-footer-item d-flex align-items-center">
+      <div className="sidebar-footer">
+        <div className="sidebar-footer-item">
           <i className="ti ti-settings" /> Settings
         </div>
-        <div className="sidebar-footer-item d-flex align-items-center">
+        <div className="sidebar-footer-item">
           <i className="ti ti-help-circle" /> Support
         </div>
-        <div className="sidebar-footer-item d-flex align-items-center" onClick={onSignOut} role="button" tabIndex={0}>
+        <div className="sidebar-footer-item" onClick={onSignOut} role="button" tabIndex={0}>
           <i className="ti ti-logout" /> Sign out
         </div>
       </div>

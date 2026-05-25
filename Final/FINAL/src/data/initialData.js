@@ -19,17 +19,17 @@ export const queueDB = [
   {id:'QD2',patientId:'P-00286',name:'Bautista, Ruth',service:'Consultation',doctor:'Dr. Cruz',status:'Done',waitMin:0,queueNum:null,urgent:false,startTime:'8:30 AM',endTime:'9:05 AM'},
 ];
 export const appointmentsDB = [
-  {id:'APT1',patientId:'P-00280',patientName:'Ocampo, Jose',service:'CT-Scan',doctor:'Dr. Lim',date:'2026-05-18',time:'8:00 AM',status:'Done',complaint:'Chronic headaches'},
-  {id:'APT2',patientId:'P-00286',patientName:'Bautista, Ruth',service:'Consultation',doctor:'Dr. Cruz',date:'2026-05-18',time:'8:30 AM',status:'Done',complaint:'Routine checkup'},
-  {id:'APT3',patientId:'P-00281',patientName:'Santos, Ana M.',service:'CBC + Urinalysis',doctor:'Dr. Cruz',date:'2026-05-18',time:'9:14 AM',status:'In Progress',complaint:'Fatigue, frequent urination'},
-  {id:'APT4',patientId:'P-00282',patientName:'Dela Cruz, Mario',service:'ECG + Echo',doctor:'Dr. Ramos',date:'2026-05-18',time:'9:30 AM',status:'Waiting',complaint:'Chest pain on exertion'},
-  {id:'APT5',patientId:'P-00283',patientName:'Gonzales, Linda',service:'Mammography',doctor:'Dr. Reyes',date:'2026-05-18',time:'9:45 AM',status:'Urgent',complaint:'Breast lump noted'},
-  {id:'APT6',patientId:'P-00284',patientName:'Reyes, Carla',service:'Ultrasound OB',doctor:'Dr. Santos',date:'2026-05-18',time:'10:00 AM',status:'Waiting',complaint:'2nd trimester checkup'},
-  {id:'APT7',patientId:'P-00287',patientName:'Villanueva, Mark',service:'Pre-op Clearance',doctor:'Dr. Cruz',date:'2026-05-18',time:'10:30 AM',status:'Waiting',complaint:'Pre-surgery workup'},
-  {id:'APT8',patientId:'P-00285',patientName:'Torres, Pedro',service:'Chest X-Ray',doctor:'Dr. Lim',date:'2026-05-18',time:'11:00 AM',status:'Waiting',complaint:'Persistent cough'},
-  {id:'APT9',patientId:'P-00284',patientName:'Aquino, Paz',service:'Geriatric Consult',doctor:'Dr. Cruz',date:'2026-05-19',time:'9:00 AM',status:'Confirmed',complaint:'Annual geriatric evaluation'},
-  {id:'APT10',patientId:'P-00285',patientName:'Mendoza, Celia',service:'Holter Monitoring',doctor:'Dr. Ramos',date:'2026-05-20',time:'8:30 AM',status:'Confirmed',complaint:'Palpitations'},
-  {id:'APT11',patientId:'P-00286',patientName:'Garcia, Lito',service:'Treadmill Stress Test',doctor:'Dr. Ramos',date:'2026-05-22',time:'10:00 AM',status:'Pending',complaint:'Exertional dyspnea'},
+  {id:'APT1',patientId:'P-00280',patientName:'Ocampo, Jose',service:'CT-Scan',doctor:'Dr. Lim',date:'2026-05-25',time:'8:00 AM',status:'Done',complaint:'Chronic headaches'},
+  {id:'APT2',patientId:'P-00286',patientName:'Bautista, Ruth',service:'Consultation',doctor:'Dr. Cruz',date:'2026-05-25',time:'8:30 AM',status:'Done',complaint:'Routine checkup'},
+  {id:'APT3',patientId:'P-00281',patientName:'Santos, Ana M.',service:'CBC + Urinalysis',doctor:'Dr. Cruz',date:'2026-05-25',time:'9:14 AM',status:'In Progress',complaint:'Fatigue, frequent urination'},
+  {id:'APT4',patientId:'P-00282',patientName:'Dela Cruz, Mario',service:'ECG + Echo',doctor:'Dr. Ramos',date:'2026-05-25',time:'9:30 AM',status:'Waiting',complaint:'Chest pain on exertion'},
+  {id:'APT5',patientId:'P-00283',patientName:'Gonzales, Linda',service:'Mammography',doctor:'Dr. Reyes',date:'2026-05-25',time:'9:45 AM',status:'Urgent',complaint:'Breast lump noted'},
+  {id:'APT6',patientId:'P-00284',patientName:'Reyes, Carla',service:'Ultrasound OB',doctor:'Dr. Santos',date:'2026-05-25',time:'10:00 AM',status:'Waiting',complaint:'2nd trimester checkup'},
+  {id:'APT7',patientId:'P-00287',patientName:'Villanueva, Mark',service:'Pre-op Clearance',doctor:'Dr. Cruz',date:'2026-05-25',time:'10:30 AM',status:'Waiting',complaint:'Pre-surgery workup'},
+  {id:'APT8',patientId:'P-00285',patientName:'Torres, Pedro',service:'Chest X-Ray',doctor:'Dr. Lim',date:'2026-05-25',time:'11:00 AM',status:'Waiting',complaint:'Persistent cough'},
+  {id:'APT9',patientId:'P-00284',patientName:'Aquino, Paz',service:'Geriatric Consult',doctor:'Dr. Cruz',date:'2026-05-26',time:'9:00 AM',status:'Confirmed',complaint:'Annual geriatric evaluation'},
+  {id:'APT10',patientId:'P-00285',patientName:'Mendoza, Celia',service:'Holter Monitoring',doctor:'Dr. Ramos',date:'2026-05-27',time:'8:30 AM',status:'Confirmed',complaint:'Palpitations'},
+  {id:'APT11',patientId:'P-00286',patientName:'Garcia, Lito',service:'Treadmill Stress Test',doctor:'Dr. Ramos',date:'2026-05-29',time:'10:00 AM',status:'Pending',complaint:'Exertional dyspnea'},
 ];
 export const invoicesDB = [
   {id:'INV-0180',patientId:'P-00280',patientName:'Ocampo, Jose',service:'CT-Scan (Head)',amount:3500,method:'Cash',status:'Paid',date:'May 18'},

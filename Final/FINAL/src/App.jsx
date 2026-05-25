@@ -319,6 +319,12 @@ export default function App() {
       return;
     }
     const p = getPatient(apptForm.patientId);
+    if (!p) {
+      showToast('Selected patient not found.');
+      return;
+    }
+    const today = new Date().toISOString().split('T')[0];
+    const isToday = apptForm.date === today;
     const row = {
       patient_id: apptForm.patientId,
       patient_name: fullName(p),
@@ -326,17 +332,40 @@ export default function App() {
       doctor: apptForm.doctor,
       date: apptForm.date,
       time: apptForm.time,
-      status: 'Confirmed',
+      status: isToday ? 'Waiting' : 'Confirmed',
       complaint: apptForm.notes,
     };
     const { data, error } = await supabase.from('appointments').insert([row]).select().single();
     if (error) {
-      showToast('Error saving appointment: ' + error.message);
-      return;
+      showToast('Warning: Could not save to database (' + error.message + '). Added locally only.');
+      // Fall through — still add to local state so UI works
     }
-    setAppointments((a) => [...a, normalizeAppt(data)]);
+    const normalized = normalizeAppt(data || { ...row, id: 'LOCAL-' + Date.now() });
+    setAppointments((a) => [...a, normalized]);
+
+    // If appointment is for today, also add to the queue
+    if (isToday) {
+      const qNum = queue.filter((q) => q.status === 'Waiting').length + 1;
+      const { data: savedQ } = await supabase
+        .from('queue')
+        .insert([{
+          patient_id: apptForm.patientId,
+          name: fullName(p),
+          service: apptForm.service,
+          doctor: apptForm.doctor,
+          status: 'Waiting',
+          wait_min: 0,
+          queue_num: qNum,
+          urgent: false,
+        }])
+        .select()
+        .single();
+      if (savedQ) setQueue((q) => [...q, normalizeQueue(savedQ)]);
+    }
+
     closeModal('appt');
-    showToast(`Appointment scheduled for ${fullName(p)} on ${apptForm.date} at ${apptForm.time}`);
+    setApptForm({ patientId: '', service: '', doctor: 'Dr. Cruz', date: today, time: '8:00 AM', notes: '' });
+    showToast(`Appointment scheduled for ${fullName(p)} on ${apptForm.date} at ${apptForm.time}${isToday ? ' — added to queue' : ''}`);
   };
 
   const markDone = async (qid) => {
@@ -469,41 +498,39 @@ export default function App() {
     setPatients((p) => [norm, ...p]);
 
     const qNum = queue.filter((q) => q.status === 'Waiting').length + 1;
+    const qRow = {
+      patient_id: pid,
+      name: `${regForm.lastName}, ${regForm.firstName}`,
+      service: regForm.service,
+      doctor: doc,
+      status: 'Waiting',
+      wait_min: 0,
+      queue_num: qNum,
+      urgent: false,
+    };
     const { data: savedQ } = await supabase
       .from('queue')
-      .insert([
-        {
-          patient_id: pid,
-          name: `${regForm.lastName}, ${regForm.firstName}`,
-          service: regForm.service,
-          doctor: doc,
-          status: 'Waiting',
-          wait_min: 0,
-          queue_num: qNum,
-          urgent: false,
-        },
-      ])
+      .insert([qRow])
       .select()
       .single();
-    if (savedQ) setQueue((q) => [...q, normalizeQueue(savedQ)]);
+    setQueue((q) => [...q, normalizeQueue(savedQ || { ...qRow, id: 'LOCAL-Q-' + Date.now() })]);
 
+    const apptRow = {
+      patient_id: pid,
+      patient_name: `${regForm.lastName}, ${regForm.firstName}`,
+      service: regForm.service,
+      doctor: doc,
+      date: regForm.apptDate,
+      time: regForm.apptTime,
+      status: 'Waiting',
+      complaint: regForm.complaint,
+    };
     const { data: savedAppt } = await supabase
       .from('appointments')
-      .insert([
-        {
-          patient_id: pid,
-          patient_name: `${regForm.lastName}, ${regForm.firstName}`,
-          service: regForm.service,
-          doctor: doc,
-          date: regForm.apptDate,
-          time: regForm.apptTime,
-          status: 'Waiting',
-          complaint: regForm.complaint,
-        },
-      ])
+      .insert([apptRow])
       .select()
       .single();
-    if (savedAppt) setAppointments((a) => [...a, normalizeAppt(savedAppt)]);
+    setAppointments((a) => [...a, normalizeAppt(savedAppt || { ...apptRow, id: 'LOCAL-A-' + Date.now() })]);
 
     const registeredName = `${patientRow.last_name}, ${patientRow.first_name}`;
     setRegForm(EMPTY_REG);

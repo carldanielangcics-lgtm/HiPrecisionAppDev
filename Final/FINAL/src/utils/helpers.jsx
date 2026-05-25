@@ -34,13 +34,13 @@ export function WaitBadge({ min }) {
 export function normalizePatient(r) {
   return {
     id: r.id,
-    lastName: r.last_name || '',
-    firstName: r.first_name || '',
+    lastName: r.last_name || r.lastName || '',
+    firstName: r.first_name || r.firstName || '',
     age: r.age || 0,
     sex: r.sex || 'M',
     contact: r.contact || '',
     service: r.service || '',
-    serviceCategory: r.service_category || 'Laboratory',
+    serviceCategory: r.service_category || r.serviceCategory || 'Laboratory',
     doctor: r.doctor || '',
     status: r.status || 'Waiting',
     time: r.time || '',
@@ -48,54 +48,50 @@ export function normalizePatient(r) {
     address: r.address || '',
     hmo: r.hmo || 'None',
     email: r.email || '',
-    ...r,
   };
 }
 
 export function normalizeAppt(r) {
   return {
     id: r.id,
-    patientId: r.patient_id || '',
-    patientName: r.patient_name || '',
+    patientId: r.patient_id || r.patientId || '',
+    patientName: r.patient_name || r.patientName || '',
     service: r.service || '',
     doctor: r.doctor || '',
     date: r.date || '',
     time: r.time || '',
     status: r.status || 'Pending',
     complaint: r.complaint || '',
-    ...r,
   };
 }
 
 export function normalizeQueue(r) {
   return {
     id: r.id,
-    patientId: r.patient_id || '',
+    patientId: r.patient_id || r.patientId || '',
     name: r.name || '',
     service: r.service || '',
     doctor: r.doctor || '',
     status: r.status || 'Waiting',
-    waitMin: r.wait_min || 0,
+    waitMin: r.wait_min ?? r.waitMin ?? 0,
     queueNum: r.queue_num || r.queueNum || 0,
     urgent: r.urgent || false,
-    startTime: r.start_time || '',
-    endTime: r.end_time || '',
-    ...r,
+    startTime: r.start_time || r.startTime || '',
+    endTime: r.end_time || r.endTime || '',
   };
 }
 
 export function normalizeInvoice(r) {
   return {
     id: r.id,
-    patientId: r.patient_id || '',
-    patientName: r.patient_name || '',
+    patientId: r.patient_id || r.patientId || '',
+    patientName: r.patient_name || r.patientName || '',
     service: r.service || '',
     amount: r.amount || 0,
     method: r.method || 'Cash',
     status: r.status || 'Pending',
     date: r.date || '',
     remarks: r.remarks || '',
-    ...r,
   };
 }
 

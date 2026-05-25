@@ -440,3 +440,242 @@ body::before,#root::before{content:'';position:fixed;inset:0;background:radial-g
 /* ═══ FLOATING CARD EFFECT ═══ */
 @keyframes floatUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .page.active>.content-header,.page.active>.stats-grid,.page.active>.panel,.page.active>.hero-panel,.page.active>.two-col,.page.active>.billing-cards-row,.page.active>.filter-chips,.page.active>.search-wrap,.page.active>.now-serving-banner,.page.active>.patient-page-hero,.page.active>.patient-page-sections,.page.active>.patient-page-back-btn{animation:floatUp .3s ease both}
+
+/* ═══ RESPONSIVE DESIGN - TABLET (641px - 1024px) ═══ */
+@media (max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .billing-cards-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .three-col{grid-template-columns:1fr 1fr}
+  .patient-page-sections{grid-template-columns:1fr}
+  .queue-board{grid-template-columns:repeat(2,1fr)}
+  .vitals-grid{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ═══ RESPONSIVE DESIGN - MOBILE (max 640px) ═══ */
+@media (max-width:640px){
+  /* LAYOUT */
+  .main{flex-direction:column}
+  .sidebar{width:100%;height:auto;padding:8px 0;border-right:none;border-bottom:1px solid rgba(255,255,255,.06);max-height:60px;overflow-x:auto;overflow-y:hidden;flex-direction:row;flex-shrink:0}
+  .sidebar-section{display:none}
+  .nav-item{padding:8px 14px;font-size:12px;margin:0;border-radius:0;border-left:none;border-bottom:3px solid transparent}
+  .nav-item.active{border-left:none;border-bottom-color:var(--hp-teal-mid);background:transparent;box-shadow:none}
+  .sidebar-footer{display:none}
+  
+  /* TOPBAR */
+  .topbar{padding:0 16px;height:50px}
+  .topbar-logo{width:32px;height:32px}
+  .topbar-name{font-size:14px}
+  .topbar-name .tagline{display:none}
+  .view-switcher{gap:2px;padding:2px}
+  .view-btn{padding:5px 10px;font-size:9px}
+  
+  /* CONTENT */
+  .content{padding:16px;overflow-y:auto}
+  .content-header{flex-direction:column;align-items:flex-start}
+  .content-title{font-size:24px}
+  
+  /* GRIDS */
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+  .two-col{grid-template-columns:1fr;gap:10px;margin-bottom:10px}
+  .two-col-equal{grid-template-columns:1fr;gap:10px}
+  .three-col{grid-template-columns:1fr;gap:10px}
+  .form-grid{grid-template-columns:1fr;gap:12px}
+  .form-group.full{grid-column:1}
+  
+  /* BILLING */
+  .billing-cards-row{grid-template-columns:1fr;gap:8px;margin-bottom:12px}
+  
+  /* QUEUE BOARD */
+  .queue-board{grid-template-columns:1fr}
+  .queue-col-header{font-size:11px;margin-bottom:8px}
+  .queue-card{padding:12px;margin-bottom:6px}
+  
+  /* CARDS */
+  .stat-card{padding:12px 14px}
+  .stat-value{font-size:22px}
+  .stat-label{font-size:10px;margin-bottom:6px}
+  .panel{margin-bottom:10px}
+  .panel-header{padding:12px 16px}
+  .panel-title{font-size:13px}
+  
+  /* BUTTONS */
+  .btn-primary,.btn-secondary,.btn-danger{padding:9px 12px;font-size:12px}
+  
+  /* TABLE */
+  .data-table{font-size:12px}
+  .data-table th{padding:8px 12px;font-size:9px}
+  .data-table td{padding:10px 12px}
+  
+  /* FORMS */
+  .form-input,.form-select,.form-textarea{padding:10px 12px;font-size:13px}
+  .form-label{font-size:10px}
+  
+  /* MODAL */
+  .modal{width:95vw;max-height:92vh}
+  .modal-header{padding:16px 18px}
+  .modal-title{font-size:18px}
+  .modal-body{padding:18px}
+  
+  /* WIZARD */
+  .wizard-progress{padding:0 10px;margin-bottom:18px}
+  .wizard-step-num{width:32px;height:32px;font-size:11px}
+  .wizard-step-label{font-size:10px}
+  .wizard-actions{flex-direction:column;margin-top:16px}
+  
+  /* SEARCH/FILTER */
+  .filter-bar{gap:6px;padding:10px 12px;flex-direction:column;align-items:stretch}
+  .search-wrap{min-width:auto;flex:1}
+  .filter-chips{gap:4px;margin-bottom:10px}
+  .filter-chip{padding:6px 12px;font-size:12px}
+  
+  /* BADGES */
+  .badge{font-size:10px;padding:2px 8px}
+  
+  /* PATIENT PROFILE */
+  .patient-profile-card{gap:12px;padding:14px;margin-bottom:10px}
+  .patient-big-avatar{width:50px;height:50px;font-size:18px}
+  .patient-profile-name{font-size:15px}
+  .patient-profile-meta{font-size:11px}
+  
+  /* PATIENT PAGE */
+  .patient-page-hero{padding:18px 20px;margin-bottom:14px;border-radius:16px}
+  .patient-page-avatar{width:64px;height:64px;font-size:22px}
+  .patient-page-name{font-size:22px;margin-bottom:4px}
+  .patient-page-meta{font-size:12px;margin-bottom:8px}
+  .patient-page-sections{gap:10px}
+  .pp-card{border-radius:12px}
+  .pp-card-header{padding:12px 14px}
+  .pp-card-title{font-size:12px}
+  .pp-card-body{padding:12px 14px}
+  
+  /* CHARTS */
+  .chart-bar-group{height:80px;margin-bottom:16px}
+  .chart-label{font-size:9px}
+  
+  /* VITALS GRID */
+  .vitals-grid{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+  .vitals-item{padding:8px 6px;border-radius:8px}
+  .vitals-label{font-size:8px;margin-bottom:2px}
+  .vitals-value{font-size:13px}
+  
+  /* TIMELINE */
+  .timeline-item{padding:10px 8px;margin:0}
+  .timeline-time{width:48px;font-size:11px}
+  .timeline-name{font-size:13px;margin-bottom:2px}
+  .timeline-detail{font-size:12px}
+  
+  /* CONSULT NOTES */
+  .consult-note-card{padding:14px;margin-bottom:10px}
+  .consult-note-patient{font-size:14px}
+  .consult-note-meta{font-size:11px;margin-top:1px}
+  .consult-note-body{font-size:13px;padding:10px;border-radius:6px}
+  
+  /* AUDIT PAGE */
+  .audit-summary-bar{gap:8px;margin-bottom:16px}
+  .audit-count-chip{gap:8px;padding:10px 14px;font-size:12px}
+  .audit-count-chip .chip-num{font-size:20px}
+  .audit-count-chip .chip-label{font-size:9px}
+  .audit-filter-bar{gap:4px;margin-bottom:12px}
+  .audit-filter-btn{padding:6px 12px;font-size:11px}
+  .audit-card-header{padding:14px 14px;gap:10px}
+  .audit-sev-pill{font-size:8px;padding:3px 8px;margin-top:1px}
+  .audit-card-title{font-size:13px}
+  .audit-card-body{padding:0 14px 14px}
+  .audit-issue-text{font-size:13px;margin-top:10px}
+  .audit-rec-box{padding:12px 14px;margin-top:10px;border-left-width:2px}
+  .audit-rec-label{font-size:9px;margin-bottom:4px}
+  .audit-rec-text{font-size:12px}
+  
+  /* REPORT CARDS */
+  .report-card{flex-direction:column;align-items:flex-start;gap:10px;padding:14px}
+  .report-card-left{width:100%}
+  .report-icon{width:40px;height:40px}
+  .report-icon i{font-size:18px}
+  .report-name{font-size:13px}
+  .report-meta{font-size:12px;margin-top:1px}
+  .report-actions{gap:6px;width:100%}
+  
+  /* APPOINTMENT */
+  .appt-row{padding:10px 12px}
+  .appt-time-col{width:54px;font-size:10px}
+  .appt-dot{width:10px;height:10px}
+  .appt-name{font-size:13px}
+  .appt-type{font-size:12px}
+  
+  /* CALENDAR */
+  .cal-grid{gap:2px;padding:10px}
+  .cal-day{min-height:32px;font-size:12px;border-radius:8px}
+  .cal-day.has-appt::after{width:3px;height:3px;bottom:3px}
+  
+  /* TOAST */
+  #toast{bottom:16px;right:16px;max-width:90vw;font-size:13px;padding:12px 16px;border-radius:12px}
+  
+  /* HERO PANEL */
+  .hero-panel{padding:18px 20px;margin-bottom:12px;border-left-width:3px}
+  .hero-title{font-size:20px;margin-bottom:6px}
+  .hero-content{font-size:13px;line-height:1.5}
+  .hero-cta{padding:10px 18px;font-size:12px;margin-top:12px}
+  .hero-cta i{font-size:14px}
+  
+  /* BILLING KPI */
+  .billing-kpi-value{font-size:24px}
+  .billing-kpi-label{font-size:10px;margin-bottom:8px}
+  .billing-kpi-sub{font-size:11px;margin-top:4px}
+  
+  /* QUEUE ITEMS */
+  .queue-item{gap:8px;padding:8px 10px;border-radius:8px;margin-bottom:4px}
+  .queue-num{width:28px;height:28px;font-size:10px}
+  .queue-name{font-size:13px}
+  .queue-detail{font-size:11px}
+  .queue-time{font-size:11px}
+  
+  /* LOGIN CARD */
+  .login-card{width:95vw;max-width:420px;padding:32px 24px}
+  .login-logo{width:60px;height:60px;margin:0 auto 12px}
+  .login-logo svg{width:28px;height:28px}
+  .login-brand{font-size:24px;margin-bottom:4px}
+  .login-sub{font-size:12px;margin-top:2px}
+  .login-form{gap:14px}
+  .login-input{padding:11px 12px;font-size:14px}
+  .login-btn{padding:12px 16px;font-size:14px;margin-top:6px}
+}
+
+/* ═══ SMALL MOBILE (max 480px) ═══ */
+@media (max-width:480px){
+  .content-title{font-size:20px}
+  .stats-grid{grid-template-columns:1fr;gap:6px}
+  .billing-cards-row{grid-template-columns:1fr}
+  .queue-board{grid-template-columns:1fr}
+  
+  .sidebar{max-height:50px;overflow-x:auto}
+  .nav-item{padding:8px 12px;font-size:11px}
+  
+  .form-grid{gap:10px}
+  .form-input,.form-select,.form-textarea{font-size:12px;padding:9px 10px}
+  
+  .data-table{font-size:11px}
+  .data-table th{padding:6px 10px;font-size:8px}
+  .data-table td{padding:8px 10px}
+  
+  .modal{width:96vw;max-height:94vh}
+  
+  .filter-bar{padding:8px 10px;gap:4px}
+  .filter-chips{gap:3px;margin-bottom:8px}
+  .filter-chip{padding:5px 10px;font-size:11px}
+  
+  .wizard-progress{padding:0 8px;margin-bottom:12px;gap:4px}
+  .wizard-step-num{width:28px;height:28px;font-size:10px}
+  .wizard-step-label{font-size:8px;margin-top:2px}
+  
+  .patient-page-avatar{width:56px;height:56px;font-size:20px;border-width:2px}
+  .patient-page-name{font-size:18px}
+  .patient-page-meta{font-size:11px}
+  
+  .panel{margin-bottom:8px}
+  .stat-card{padding:10px 12px}
+  .stat-value{font-size:18px}
+  
+  .consult-note-body{font-size:12px;line-height:1.5;padding:8px}
+  .audit-card-header{padding:12px}
+  .audit-card-body{padding:0 12px 12px}
+}

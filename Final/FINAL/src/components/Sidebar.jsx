@@ -15,7 +15,7 @@ export default function Sidebar({ currentPage, onNavigate, getBadgeVal, onSignOu
       html.push(
         <div
           key={item.page}
-          className={`nav-item${active}`}
+          className={`nav-item${active} d-flex align-items-center justify-content-between`}
           onClick={() => onNavigate(item.page)}
           onKeyDown={(e) => e.key === 'Enter' && onNavigate(item.page)}
           role="button"
@@ -30,16 +30,16 @@ export default function Sidebar({ currentPage, onNavigate, getBadgeVal, onSignOu
   });
 
   return (
-    <div className="sidebar" id="sidebar">
+    <div className="sidebar d-flex flex-column" id="sidebar">
       {html}
-      <div className="sidebar-footer">
-        <div className="sidebar-footer-item">
+      <div className="sidebar-footer mt-auto">
+        <div className="sidebar-footer-item d-flex align-items-center">
           <i className="ti ti-settings" /> Settings
         </div>
-        <div className="sidebar-footer-item">
+        <div className="sidebar-footer-item d-flex align-items-center">
           <i className="ti ti-help-circle" /> Support
         </div>
-        <div className="sidebar-footer-item" onClick={onSignOut} role="button" tabIndex={0}>
+        <div className="sidebar-footer-item d-flex align-items-center" onClick={onSignOut} role="button" tabIndex={0}>
           <i className="ti ti-logout" /> Sign out
         </div>
       </div>

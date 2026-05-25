@@ -10,8 +10,8 @@ export default function LoginScreen({ onLogin, loginError, showPassword, onToggl
 
   return (
     <div className="login-container" id="login-screen">
-      <div className="login-card">
-        <div className="login-header">
+      <div className="login-card shadow-lg">
+        <div className="login-header text-center">
           <div className="login-logo">{HP_LOGO_SVG}</div>
           <div className="login-brand">
             <span className="login-brand-hi">Hi-</span>
@@ -20,7 +20,7 @@ export default function LoginScreen({ onLogin, loginError, showPassword, onToggl
           </div>
           <div className="login-sub">Patient Management System</div>
         </div>
-        <form className="login-form" onSubmit={onLogin}>
+        <form className="login-form d-flex flex-column gap-3" onSubmit={onLogin}>
           <div className="login-input-group">
             <label className="login-label" htmlFor="login-username">Email</label>
             <input
@@ -56,7 +56,7 @@ export default function LoginScreen({ onLogin, loginError, showPassword, onToggl
           <div className={`login-error${loginError ? ' show' : ''}`} id="login-error">
             {loginError || 'Invalid username or password.'}
           </div>
-          <button type="submit" className="login-btn">
+          <button type="submit" className="login-btn btn btn-primary">
             Sign In
           </button>
         </form>

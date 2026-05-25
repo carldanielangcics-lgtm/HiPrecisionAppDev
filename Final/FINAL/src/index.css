@@ -41,9 +41,6 @@ code {
   font-family: 'Courier New', monospace;
 }
 
-/* Bootstrap Integration */
-@import 'bootstrap/scss/bootstrap';
-
 /* Responsive utility overrides */
 @layer utilities {
   .transition-all {

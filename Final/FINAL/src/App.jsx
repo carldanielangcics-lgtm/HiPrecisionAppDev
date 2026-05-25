@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import LoginScreen from './components/LoginScreen';
 import Topbar from './components/Topbar';
@@ -71,6 +72,8 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [toast, setToast] = useState({ message: '', visible: false });
   const toastTimer = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [patients, setPatients] = useState(initialPatients);
   const [queue, setQueue] = useState(initialQueue);
@@ -134,10 +137,30 @@ export default function App() {
     [queue, patients]
   );
 
-  const navigateTo = useCallback((page) => {
-    setCurrentPage(page);
-    if (contentRef.current) contentRef.current.scrollTop = 0;
-  }, []);
+  const routeMap = {
+    dashboard: '/dashboard',
+    patients: '/patients',
+    appointments: '/appointments',
+    queue: '/queue',
+    registration: '/registration',
+    billing: '/billing',
+    reports: '/reports',
+    'ux-audit': '/ux-audit',
+  };
+
+  const navigateTo = useCallback(
+    (page) => {
+      setCurrentPage(page);
+      navigate(routeMap[page] || '/dashboard');
+      if (contentRef.current) contentRef.current.scrollTop = 0;
+    },
+    [navigate]
+  );
+
+  useEffect(() => {
+    const path = location.pathname.replace(/^\/+/, '');
+    setCurrentPage(path === '' ? 'dashboard' : path);
+  }, [location.pathname]);
 
   const openModal = (id) => setModals((m) => ({ ...m, [id]: true }));
   const closeModal = (id) => setModals((m) => ({ ...m, [id]: false }));
@@ -185,7 +208,7 @@ export default function App() {
     setIsLoggedIn(true);
     await loadAll();
     subscribeQueueRealtime();
-    navigateTo('dashboard');
+    navigate('/dashboard');
   };
 
   const signOut = async () => {
@@ -669,10 +692,87 @@ export default function App() {
   return (
     <>
       <Topbar />
-      <div className="main" id="main-app">
+      <div className="main container-fluid" id="main-app">
         <Sidebar currentPage={currentPage} onNavigate={navigateTo} getBadgeVal={getBadgeVal} onSignOut={signOut} />
-        <div className="content" id="content" ref={contentRef}>
-          {renderPage()}
+        <div className="content position-relative" id="content" ref={contentRef}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<DashboardPage patients={patients} queue={queue} appointments={appointments} onNavigate={navigateTo} />} />
+            <Route path="/patients" element={<PatientsPage
+              patients={patients}
+              patientChipFilter={patientChipFilter}
+              patientPage={patientPage}
+              patientSearch={patientSearch}
+              patientServiceFilter={patientServiceFilter}
+              patientDoctorFilter={patientDoctorFilter}
+              onSetChip={(v) => {
+                setPatientChipFilter(v);
+                setPatientPage(1);
+              }}
+              onSearchChange={(v) => {
+                setPatientSearch(v);
+                setPatientPage(1);
+              }}
+              onServiceFilterChange={setPatientServiceFilter}
+              onDoctorFilterChange={setPatientDoctorFilter}
+              onSetPage={setPatientPage}
+              onNavigate={navigateTo}
+              onOpenExport={() => openModal('export')}
+              onOpenPatient={openPatientModal}
+              onOpenEdit={openEditPatient}
+            />} />
+            <Route path="/appointments" element={<AppointmentsPage
+              appointments={appointments}
+              calYear={calYear}
+              calMonth={calMonth}
+              selectedCalDay={selectedCalDay}
+              onChangeMonth={changeCalMonth}
+              onSelectDay={setSelectedCalDay}
+              onOpenApptModal={() => openModal('appt')}
+            />} />
+            <Route path="/queue" element={<QueuePage
+              queue={queue}
+              onOpenApptModal={() => openModal('appt')}
+              onRefresh={loadAll}
+              onMarkDone={markDone}
+              onPrioritize={prioritize}
+              onMoveUp={moveUp}
+            />} />
+            <Route path="/registration" element={<RegistrationPage
+              wizardStep={wizardStep}
+              showSummary={showSummary}
+              summary={regSummary}
+              onNavigate={navigateTo}
+              onNext={nextRegStep}
+              onPrev={(from) => setWizardStep(from - 1)}
+              onSubmit={submitRegistration}
+              regForm={regForm}
+              onRegChange={(field, value) => setRegForm((f) => ({ ...f, [field]: value }))}
+              consentChecked={consentChecked}
+              onConsentChange={(e) => setConsentChecked(e.target.checked)}
+            />} />
+            <Route path="/billing" element={<BillingPage
+              invoices={invoices}
+              billingChipFilter={billingChipFilter}
+              billingPage={billingPage}
+              billingSearch={billingSearch}
+              onSetChip={(v) => {
+                setBillingChipFilter(v);
+                setBillingPage(1);
+              }}
+              onSearchChange={(v) => {
+                setBillingSearch(v);
+                setBillingPage(1);
+              }}
+              onSetPage={setBillingPage}
+              onOpenBillingModal={() => openModal('billing')}
+              onCollect={collectPayment}
+              onToast={showToast}
+            />} />
+            <Route path="/reports" element={<ReportsPage onToast={showToast} />} />
+            <Route path="/ux-audit" element={<UxAuditPage />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
         </div>
       </div>
 

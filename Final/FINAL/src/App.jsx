@@ -93,9 +93,13 @@ export default function App() {
   const [billingPage, setBillingPage] = useState(1);
   const [billingSearch, setBillingSearch] = useState('');
 
-  const [calYear, setCalYear] = useState(2026);
-  const [calMonth, setCalMonth] = useState(4);
-  const [selectedCalDay, setSelectedCalDay] = useState(18);
+  const today = new Date();
+  const todayYear = today.getFullYear();
+  const todayMonth = today.getMonth();
+  const todayDay = today.getDate();
+  const [calYear, setCalYear] = useState(todayYear);
+  const [calMonth, setCalMonth] = useState(todayMonth);
+  const [selectedCalDay, setSelectedCalDay] = useState(todayDay);
 
   const [wizardStep, setWizardStep] = useState(1);
   const [regForm, setRegForm] = useState(EMPTY_REG);
@@ -550,16 +554,18 @@ export default function App() {
   const changeCalMonth = (dir) => {
     setCalMonth((m) => {
       let next = m + dir;
-      let year = calYear;
+      let nextYear = calYear;
       if (next > 11) {
         next = 0;
-        year += 1;
+        nextYear += 1;
       }
       if (next < 0) {
         next = 11;
-        year -= 1;
+        nextYear -= 1;
       }
-      setCalYear(year);
+      setCalYear(nextYear);
+      const daysInNextMonth = new Date(nextYear, next + 1, 0).getDate();
+      setSelectedCalDay((day) => Math.min(day, daysInNextMonth));
       return next;
     });
   };

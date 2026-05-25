@@ -19,6 +19,12 @@ export default function AppointmentsPage({
   onSelectDay,
   onOpenApptModal,
 }) {
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+  const weekEnd = new Date(today);
+  weekEnd.setDate(weekEnd.getDate() + 7);
+  const weekEndStr = weekEnd.toISOString().split('T')[0];
+
   const firstDay = new Date(calYear, calMonth, 1).getDay();
   const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
   const prevDays = new Date(calYear, calMonth, 0).getDate();
@@ -33,7 +39,10 @@ export default function AppointmentsPage({
 
   const dateStr = `${calYear}-${String(calMonth + 1).padStart(2, '0')}-${String(selectedCalDay).padStart(2, '0')}`;
   const dayAppts = appointments.filter((a) => a.date === dateStr);
-  const upcoming = appointments.filter((a) => a.date > '2026-05-18').slice(0, 5);
+  const upcoming = appointments
+    .filter((a) => a.date >= todayStr && a.date <= weekEndStr)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 5);
 
   let calCells = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
     <div key={`hdr-${d}`} className="cal-day-hdr">
@@ -48,8 +57,8 @@ export default function AppointmentsPage({
     );
   }
   for (let d = 1; d <= daysInMonth; d++) {
-    const isToday = d === 18 && calMonth === 4 && calYear === 2026;
-    const isSelected = d === selectedCalDay && calMonth === 4 && calYear === 2026;
+    const isToday = d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
+    const isSelected = d === selectedCalDay;
     const hasAppt = apptDays.has(d);
     calCells.push(
       <div
@@ -77,7 +86,7 @@ export default function AppointmentsPage({
       <div className="content-header">
         <div>
           <div className="content-title">Appointments</div>
-          <div className="content-sub">Schedule management · May 2026</div>
+          <div className="content-sub">Schedule management · {M_NAMES[calMonth]} {calYear}</div>
         </div>
         <button type="button" className="btn-primary" style={{ padding: '12px 20px', fontSize: 15 }} onClick={onOpenApptModal}>
           <i className="ti ti-plus" /> New Appointment
@@ -107,8 +116,8 @@ export default function AppointmentsPage({
               <div className="panel-title">
                 <i className="ti ti-calendar-event" />{' '}
                 <span id="appt-day-title">
-                  May {selectedCalDay}
-                  {selectedCalDay === 18 ? ' — Today\u2019s Schedule' : ''}
+                  {M_NAMES[calMonth]} {selectedCalDay}
+                  {selectedCalDay === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear() ? ' — Today\u2019s Schedule' : ''}
                 </span>
               </div>
               <span style={{ fontSize: 12, color: 'var(--text2)' }} id="appt-day-count">

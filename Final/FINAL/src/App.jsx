@@ -454,7 +454,6 @@ export default function App() {
       dob: regForm.dob,
       address: regForm.address,
       hmo: regForm.hmo,
-      email: regForm.email,
     };
     const { data: savedPat, error } = await supabase.from('patients').insert([patientRow]).select().single();
     if (error) {

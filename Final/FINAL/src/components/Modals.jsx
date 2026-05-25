@@ -84,20 +84,20 @@ export function EditPatientModal({ open, onClose, editForm, onEditChange, onSave
       <div className="modal-body">
         <div className="form-grid">
           <div className="form-group">
-            <label className="form-label">Last Name</label>
-            <input type="text" className="form-input" value={editForm.lastName} onChange={set('lastName')} />
+            <label htmlFor="ep-last-name" className="form-label">Last Name</label>
+            <input id="ep-last-name" type="text" className="form-input" value={editForm.lastName} onChange={set('lastName')} />
           </div>
           <div className="form-group">
-            <label className="form-label">First Name</label>
-            <input type="text" className="form-input" value={editForm.firstName} onChange={set('firstName')} />
+            <label htmlFor="ep-first-name" className="form-label">First Name</label>
+            <input id="ep-first-name" type="text" className="form-input" value={editForm.firstName} onChange={set('firstName')} />
           </div>
           <div className="form-group">
-            <label className="form-label">Contact</label>
-            <input type="text" className="form-input" value={editForm.contact} onChange={set('contact')} />
+            <label htmlFor="ep-contact" className="form-label">Contact</label>
+            <input id="ep-contact" type="text" className="form-input" value={editForm.contact} onChange={set('contact')} />
           </div>
           <div className="form-group">
-            <label className="form-label">Status</label>
-            <select className="form-select" value={editForm.status} onChange={set('status')}>
+            <label htmlFor="ep-status" className="form-label">Status</label>
+            <select id="ep-status" className="form-select" value={editForm.status} onChange={set('status')}>
               <option>Waiting</option>
               <option>In Progress</option>
               <option>Done</option>
@@ -105,12 +105,12 @@ export function EditPatientModal({ open, onClose, editForm, onEditChange, onSave
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">Service</label>
-            <input type="text" className="form-input" value={editForm.service} onChange={set('service')} />
+            <label htmlFor="ep-service" className="form-label">Service</label>
+            <input id="ep-service" type="text" className="form-input" value={editForm.service} onChange={set('service')} />
           </div>
           <div className="form-group">
-            <label className="form-label">Doctor</label>
-            <select className="form-select" value={editForm.doctor} onChange={set('doctor')}>
+            <label htmlFor="ep-doctor" className="form-label">Doctor</label>
+            <select id="ep-doctor" className="form-select" value={editForm.doctor} onChange={set('doctor')}>
               <option>Dr. Cruz</option>
               <option>Dr. Ramos</option>
               <option>Dr. Reyes</option>
@@ -145,10 +145,10 @@ export function ApptModal({ open, onClose, patients, apptForm, onApptChange, onS
       <div className="modal-body">
         <div className="form-grid">
           <div className="form-group full">
-            <label className="form-label">
+            <label htmlFor="appt-patient" className="form-label">
               Patient <span style={{ color: 'var(--hp-red)' }}>*</span>
             </label>
-            <select className="form-select" value={apptForm.patientId} onChange={set('patientId')}>
+            <select id="appt-patient" className="form-select" value={apptForm.patientId} onChange={set('patientId')}>
               <option value="">-- Select Patient --</option>
               {patients.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -158,10 +158,10 @@ export function ApptModal({ open, onClose, patients, apptForm, onApptChange, onS
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">
+            <label htmlFor="appt-service" className="form-label">
               Service <span style={{ color: 'var(--hp-red)' }}>*</span>
             </label>
-            <select className="form-select" value={apptForm.service} onChange={set('service')}>
+            <select id="appt-service" className="form-select" value={apptForm.service} onChange={set('service')}>
               <option value="">-- Select --</option>
               <option>CBC</option>
               <option>Urinalysis</option>
@@ -174,8 +174,8 @@ export function ApptModal({ open, onClose, patients, apptForm, onApptChange, onS
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">Doctor</label>
-            <select className="form-select" value={apptForm.doctor} onChange={set('doctor')}>
+            <label htmlFor="appt-doctor" className="form-label">Doctor</label>
+            <select id="appt-doctor" className="form-select" value={apptForm.doctor} onChange={set('doctor')}>
               <option>Dr. Cruz</option>
               <option>Dr. Ramos</option>
               <option>Dr. Reyes</option>
@@ -184,14 +184,14 @@ export function ApptModal({ open, onClose, patients, apptForm, onApptChange, onS
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">
+            <label htmlFor="appt-date" className="form-label">
               Date <span style={{ color: 'var(--hp-red)' }}>*</span>
             </label>
-            <input type="date" className="form-input" value={apptForm.date} onChange={set('date')} />
+            <input id="appt-date" type="date" className="form-input" value={apptForm.date} onChange={set('date')} />
           </div>
           <div className="form-group">
-            <label className="form-label">Time</label>
-            <select className="form-select" value={apptForm.time} onChange={set('time')}>
+            <label htmlFor="appt-time" className="form-label">Time</label>
+            <select id="appt-time" className="form-select" value={apptForm.time} onChange={set('time')}>
               <option>8:00 AM</option>
               <option>9:00 AM</option>
               <option>10:00 AM</option>
@@ -201,8 +201,8 @@ export function ApptModal({ open, onClose, patients, apptForm, onApptChange, onS
             </select>
           </div>
           <div className="form-group full">
-            <label className="form-label">Notes</label>
-            <textarea className="form-textarea" value={apptForm.notes} onChange={set('notes')} style={{ minHeight: 56 }} />
+            <label htmlFor="appt-notes" className="form-label">Notes</label>
+            <textarea id="appt-notes" className="form-textarea" value={apptForm.notes} onChange={set('notes')} style={{ minHeight: 56 }} />
           </div>
         </div>
       </div>
@@ -231,10 +231,10 @@ export function BillingModal({ open, onClose, patients, invForm, onInvChange, on
       <div className="modal-body">
         <div className="form-grid">
           <div className="form-group full">
-            <label className="form-label">
+            <label htmlFor="inv-patient" className="form-label">
               Patient <span style={{ color: 'var(--hp-red)' }}>*</span>
             </label>
-            <select className="form-select" value={invForm.patientId} onChange={set('patientId')}>
+            <select id="inv-patient" className="form-select" value={invForm.patientId} onChange={set('patientId')}>
               <option value="">-- Select Patient --</option>
               {patients.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -244,8 +244,8 @@ export function BillingModal({ open, onClose, patients, invForm, onInvChange, on
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">Service</label>
-            <select className="form-select" value={invForm.service} onChange={set('service')}>
+            <label htmlFor="inv-service" className="form-label">Service</label>
+            <select id="inv-service" className="form-select" value={invForm.service} onChange={set('service')}>
               <option>CBC</option>
               <option>Urinalysis</option>
               <option>Chest X-Ray</option>
@@ -255,14 +255,14 @@ export function BillingModal({ open, onClose, patients, invForm, onInvChange, on
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">
+            <label htmlFor="inv-amount" className="form-label">
               Amount (₱) <span style={{ color: 'var(--hp-red)' }}>*</span>
             </label>
-            <input type="number" className="form-input" value={invForm.amount} onChange={set('amount')} placeholder="0.00" />
+            <input id="inv-amount" type="number" className="form-input" value={invForm.amount} onChange={set('amount')} placeholder="0.00" />
           </div>
           <div className="form-group">
-            <label className="form-label">Payment Method</label>
-            <select className="form-select" value={invForm.method} onChange={set('method')}>
+            <label htmlFor="inv-method" className="form-label">Payment Method</label>
+            <select id="inv-method" className="form-select" value={invForm.method} onChange={set('method')}>
               <option>Cash</option>
               <option>GCash / Maya</option>
               <option>Credit Card</option>
@@ -271,8 +271,8 @@ export function BillingModal({ open, onClose, patients, invForm, onInvChange, on
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">Discount</label>
-            <select className="form-select" value={invForm.discount} onChange={set('discount')}>
+            <label htmlFor="inv-discount" className="form-label">Discount</label>
+            <select id="inv-discount" className="form-select" value={invForm.discount} onChange={set('discount')}>
               <option>None</option>
               <option>Senior Citizen (20%)</option>
               <option>PWD (20%)</option>
@@ -280,8 +280,8 @@ export function BillingModal({ open, onClose, patients, invForm, onInvChange, on
             </select>
           </div>
           <div className="form-group full">
-            <label className="form-label">Remarks</label>
-            <textarea className="form-textarea" value={invForm.remarks} onChange={set('remarks')} style={{ minHeight: 52 }} />
+            <label htmlFor="inv-remarks" className="form-label">Remarks</label>
+            <textarea id="inv-remarks" className="form-textarea" value={invForm.remarks} onChange={set('remarks')} style={{ minHeight: 52 }} />
           </div>
         </div>
       </div>
@@ -308,15 +308,15 @@ export function ExportModal({ open, onClose, onExport }) {
       </div>
       <div className="modal-body">
         <div className="form-group" style={{ marginBottom: 12 }}>
-          <label className="form-label">Format</label>
-          <select className="form-select">
+          <label htmlFor="exp-format" className="form-label">Format</label>
+          <select id="exp-format" className="form-select">
             <option>PDF</option>
             <option>CSV / Excel</option>
           </select>
         </div>
         <div className="form-group" style={{ marginBottom: 12 }}>
-          <label className="form-label">Date Range</label>
-          <input type="date" className="form-input" />
+          <label htmlFor="exp-date" className="form-label">Date Range</label>
+          <input id="exp-date" type="date" className="form-input" />
         </div>
         <div style={{ background: '#FEF5E7', border: '1px solid #f5d89a', borderRadius: 8, padding: '10px 13px', fontSize: 13, color: '#633806' }}>
           <i className="ti ti-lock" style={{ marginRight: 5 }} />

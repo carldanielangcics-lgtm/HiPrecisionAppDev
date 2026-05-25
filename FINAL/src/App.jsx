@@ -175,11 +175,14 @@ export default function App() {
   };
   const loadAppointments = async () => {
     const { data, error } = await supabase.from('appointments').select('*').order('date', { ascending: true });
-    if (!error && data) setAppointments(data.map(normalizeAppt));
+    // Only replace local state when Supabase actually returns rows.
+    // An empty array means the table has no rows yet OR RLS blocked the read —
+    // either way, keep initialData so the UI is never blank.
+    if (!error && data && data.length > 0) setAppointments(data.map(normalizeAppt));
   };
   const loadQueue = async () => {
     const { data, error } = await supabase.from('queue').select('*').order('queue_num', { ascending: true });
-    if (!error && data) setQueue(data.map(normalizeQueue));
+    if (!error && data && data.length > 0) setQueue(data.map(normalizeQueue));
   };
   const loadInvoices = async () => {
     const { data, error } = await supabase.from('invoices').select('*').order('created_at', { ascending: false });
@@ -364,8 +367,10 @@ export default function App() {
     }
 
     closeModal('appt');
+    const bookedDate = apptForm.date;
+    const bookedTime = apptForm.time;
     setApptForm({ patientId: '', service: '', doctor: 'Dr. Cruz', date: today, time: '8:00 AM', notes: '' });
-    showToast(`Appointment scheduled for ${fullName(p)} on ${apptForm.date} at ${apptForm.time}${isToday ? ' — added to queue' : ''}`);
+    showToast(`Appointment scheduled for ${fullName(p)} on ${bookedDate} at ${bookedTime}${isToday ? ' — added to queue' : ''}`);
   };
 
   const markDone = async (qid) => {
